@@ -1,0 +1,49 @@
+<view class="page-prepare">
+  <!-- 岗位选择 -->
+  <view class="form-group">
+    <view class="form-label">💼 选择岗位</view>
+    <picker mode="selector" range="{{jobs}}" value="{{jobIndex}}" bindchange="onPickerChange">
+      <view class="form-select">
+        <text>{{jobs[jobIndex]}}</text>
+        <text style="color:#6b7280;">▾</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 难度选择 -->
+  <view class="form-group">
+    <view class="form-label">🎯 难度选择</view>
+    <view class="diff-pills">
+      <view class="diff-pill {{difficultyIndex === index ? 'active' : ''}}"
+            wx:for="{{difficulties}}" wx:key="*this"
+            data-index="{{index}}" bindtap="onSelectDifficulty">
+        {{item}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 面试形式 -->
+  <view class="form-group">
+    <view class="form-label">🎧 面试形式</view>
+    <view class="mode-cards">
+      <view class="mode-card {{item.active ? 'active' : ''}}"
+            wx:for="{{modes}}" wx:key="id"
+            data-index="{{index}}" bindtap="onSelectMode">
+        <view class="mode-badge" wx:if="{{item.active}}">推荐</view>
+        <view class="mode-icon">{{item.icon}}</view>
+        <view class="mode-title">{{item.name}}</view>
+        <view class="mode-sub">{{item.sub}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 面试须知 -->
+  <view class="tips-box">
+    <view class="tips-title">ℹ️ 面试须知</view>
+    <view class="tips-item">• 语音面试需授权麦克风权限</view>
+    <view class="tips-item">• 每轮面试包含 5 道题目</view>
+    <view class="tips-item">• 每题思考时间 60 秒，回答 120 秒</view>
+  </view>
+
+  <view class="btn-primary" bindtap="onStartInterview">开始面试</view>
+</view>

@@ -1,0 +1,32 @@
+<view class="page-home">
+  <!-- 欢迎区 -->
+  <view class="hero">
+    <view class="avatar">🤖</view>
+    <view class="greeting">你好，准备好面试了吗？</view>
+    <view class="sub">AI面试官已就位，选择场景开始练习</view>
+  </view>
+
+  <!-- 场景卡片 -->
+  <view class="scene-list">
+    <view class="scene-card" wx:for="{{scenes}}" wx:key="id" data-scene="{{item.id}}" bindtap="onSelectScene">
+      <view class="scene-icon {{item.color}}">{{item.icon}}</view>
+      <view class="scene-info">
+        <view class="scene-name">{{item.name}}</view>
+        <view class="scene-desc">{{item.desc}}</view>
+      </view>
+      <view class="scene-arrow">▶</view>
+    </view>
+  </view>
+
+  <!-- 剩余次数 -->
+  <view class="remaining-bar">
+    <text>免费模拟次数</text>
+    <text class="count">{{freeCount}} / 3</text>
+  </view>
+
+  <!-- 最近面试入口 -->
+  <view class="history-entry" bindtap="onGoHistory">
+    <text class="history-text">🕐 最近面试</text>
+    <text class="history-link">查看记录 ▶</text>
+  </view>
+</view>

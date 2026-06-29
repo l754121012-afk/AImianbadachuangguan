@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/prepare/prepare",
+    "pages/interview/interview",
+    "pages/report/report"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#0a0e1a",
+    "navigationBarTitleText": "AI面霸大闯关",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#0a0e1a"
+  },
+  "tabBar": {
+    "color": "#6b7280",
+    "selectedColor": "#f59e0b",
+    "backgroundColor": "#0a0e1a",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/tab-home.png",
+        "selectedIconPath": "assets/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/prepare/prepare",
+        "text": "练习",
+        "iconPath": "assets/tab-practice.png",
+        "selectedIconPath": "assets/tab-practice-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

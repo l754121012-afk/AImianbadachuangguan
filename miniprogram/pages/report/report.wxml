@@ -1,0 +1,51 @@
+<view class="page-report">
+  <!-- 分数区 -->
+  <view class="report-hero">
+    <view class="score-ring">
+      <view class="score-inner">
+        <view class="score-number">{{score}}</view>
+        <view class="score-label">综合评分</view>
+      </view>
+    </view>
+    <view class="score-tag">🏆 表现优秀，超过{{percentile}}%的用户</view>
+  </view>
+
+  <!-- 雷达图标题 -->
+  <view class="section-title">五维能力分析</view>
+
+  <!-- 维度条 -->
+  <view class="dimension-list">
+    <view class="dim-item" wx:for="{{dimensions}}" wx:key="name">
+      <view class="dim-label">{{item.name}}</view>
+      <view class="dim-track">
+        <view class="dim-fill" style="width: {{item.score}}%"></view>
+      </view>
+      <view class="dim-value">{{item.score}}</view>
+    </view>
+  </view>
+
+  <!-- 逐题分析 -->
+  <view class="section-title">逐题分析</view>
+  <view class="q-card" wx:for="{{questions}}" wx:key="id">
+    <view class="q-num">Q{{item.id}} · {{item.title}}</view>
+    <view class="q-title">{{item.text}}</view>
+    <view class="q-feedback">{{item.feedback}}</view>
+    <view class="q-badge {{item.badge === '优秀' ? 'badge-green' : 'badge-amber'}}">
+      {{item.badge === '优秀' ? '✓' : '▲'}} {{item.badge}}
+    </view>
+  </view>
+
+  <!-- 锁定提示 -->
+  <view class="q-card locked" wx:if="{{!isVip}}">
+    <view class="q-num">Q3 · 行为面试</view>
+    <view class="q-title">🔒 完整报告需解锁</view>
+    <view class="q-feedback">查看Q3-Q5的详细分析，请解锁完整报告</view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="btn-primary" wx:if="{{!isVip}}" bindtap="onUnlock">🔒 解锁完整报告</view>
+  <view class="btn-outline" bindtap="onShare">📷 分享到朋友圈</view>
+</view>
+
+<!-- 付费弹窗 -->
+<payment-modal show="{{showPayment}}" bind:close="onClosePayment" />

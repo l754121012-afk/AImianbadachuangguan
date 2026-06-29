@@ -1,0 +1,41 @@
+<view class="page-interview">
+  <!-- 顶部信息 -->
+  <view class="interview-top">
+    <view class="interviewer-mini">🤖</view>
+    <view class="interview-label">
+      <view class="interview-name">AI面试官</view>
+      <view class="interview-meta">{{currentScene}} · {{difficulty}}</view>
+    </view>
+    <view class="interview-progress">{{currentQuestion}} / {{totalQuestions}}</view>
+  </view>
+
+  <!-- 进度条 -->
+  <view class="progress-track">
+    <view class="progress-fill" style="width: {{currentQuestion / totalQuestions * 100}}%"></view>
+  </view>
+
+  <!-- 对话区 -->
+  <scroll-view class="chat-area" scroll-y>
+    <view class="chat-bubble {{item.type}}" wx:for="{{questions}}" wx:key="id">
+      <view class="bubble-label">
+        <text wx:if="{{item.type === 'ai'}}">🤖 AI面试官 · 第{{item.id}}题</text>
+        <text wx:else>👤 我 · 已回答</text>
+      </view>
+      <view>{{item.text}}</view>
+    </view>
+  </scroll-view>
+
+  <!-- 录音区 -->
+  <view class="record-area">
+    <view class="record-btn {{isRecording ? 'recording' : ''}}" bindtap="toggleRecording">
+      <text class="record-icon">🎙️</text>
+    </view>
+    <view class="record-timer">{{formatTime(timer)}}</view>
+    <view class="record-status">
+      <text wx:if="{{isRecording}}">● 正在录音...</text>
+      <text wx:else>点击开始录音</text>
+    </view>
+    <view class="record-switch" bindtap="onSwitchToText">切换文字输入 ▶</view>
+    <view class="btn-primary" wx:if="{{currentQuestion >= totalQuestions}}" bindtap="onFinish">完成面试</view>
+  </view>
+</view>
