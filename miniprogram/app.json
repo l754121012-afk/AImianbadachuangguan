@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/record/record",
     "pages/prepare/prepare",
     "pages/interview/interview",
     "pages/report/report"
@@ -23,8 +24,8 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/prepare/prepare",
-        "text": "练习"
+        "pagePath": "pages/record/record",
+        "text": "记录"
       }
     ]
   },

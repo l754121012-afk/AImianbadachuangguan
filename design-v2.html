@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AI面霸大闯关 V2 设计稿</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: #05070e;
+  color: #e5e7eb;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ===== NAVIGATION ===== */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(5,7,14,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0 1rem;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+}
+.top-nav::-webkit-scrollbar { display: none; }
+.nav-btn {
+  flex-shrink: 0;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  color: #9ca3af;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s;
+}
+.nav-btn.active {
+  background: #f59e0b;
+  color: #000;
+  border-color: #f59e0b;
+  font-weight: 700;
+}
+
+/* ===== PHONE MOCKUP ===== */
+.page-section {
+  display: none;
+  min-height: 100vh;
+  padding: 64px 1rem 2rem;
+  justify-content: center;
+  align-items: center;
+}
+.page-section.active { display: flex; }
+
+.phone-frame {
+  width: 100%;
+  max-width: 375px;
+  background: #0a0e1a;
+  border-radius: 32px;
+  border: 2px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  position: relative;
+  min-height: 700px;
+}
+
+/* ===== STATUS BAR ===== */
+.status-bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ===== COMMON ===== */
+.page-content {
+  padding-bottom: 80px;
+  overflow-y: auto;
+  max-height: calc(700px - 44px);
+}
+
+.card {
+  background: #111827;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 16px;
+  margin: 0 16px 12px;
+}
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+.badge-amber { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.badge-blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
+.badge-green { background: rgba(16,185,129,0.15); color: #10b981; }
+.badge-purple { background: rgba(139,92,246,0.15); color: #a78bfa; }
+
+/* ===== TAB BAR ===== */
+.tab-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  background: rgba(10,14,26,0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 8px;
+  z-index: 50;
+}
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.65rem;
+  color: #6b7280;
+  cursor: pointer;
+}
+.tab-item.active { color: #f59e0b; }
+.tab-icon {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+
+/* ==================== PAGE 1: 首页 ==================== */
+.home-header {
+  text-align: center;
+  padding: 20px 16px 16px;
+}
+.home-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #3b82f6);
+  margin: 0 auto 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 8px 24px rgba(245,158,11,0.25);
+}
+.home-greeting {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+}
+.home-sub {
+  font-size: 0.82rem;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* 今日状态卡片 */
+.today-status {
+  display: flex;
+  gap: 10px;
+  margin: 0 16px 16px;
+}
+.status-item {
+  flex: 1;
+  background: #111827;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 14px;
+  text-align: center;
+}
+.status-item .num {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #f59e0b;
+}
+.status-item .label {
+  font-size: 0.72rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* 快速开始 */
+.quick-start {
+  margin: 0 16px 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(59,130,246,0.08));
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+.quick-start .icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.quick-start .info { flex: 1; }
+.quick-start .info h3 { font-size: 0.95rem; font-weight: 700; color: #fff; }
+.quick-start .info p { font-size: 0.75rem; color: #9ca3af; margin-top: 2px; }
+.quick-start .arrow { color: #f59e0b; font-size: 1.1rem; }
+
+/* 场景卡片 */
+.scene-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 16px 10px;
+}
+.scene-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px;
+  background: #111827;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  margin: 0 16px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.scene-card:hover, .scene-card:active {
+  border-color: rgba(245,158,11,0.3);
+  transform: translateY(-1px);
+}
+.scene-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.scene-icon.job { background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(245,158,11,0.05)); }
+.scene-icon.kaoyan { background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(59,130,246,0.05)); }
+.scene-icon.kaogong { background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.05)); }
+.scene-info { flex: 1; }
+.scene-info h3 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+.scene-info p { font-size: 0.75rem; color: #6b7280; }
+.scene-arrow { color: #4b5563; font-size: 0.9rem; }
+
+/* 最近练习 */
+.recent-section {
+  margin-top: 8px;
+}
+.recent-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 16px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.recent-section-title .more {
+  font-size: 0.72rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #111827;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.04);
+  margin: 0 16px 8px;
+}
+.recent-item .type-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.recent-item .detail { flex: 1; }
+.recent-item .detail h4 { font-size: 0.85rem; font-weight: 600; color: #fff; }
+.recent-item .detail p { font-size: 0.7rem; color: #6b7280; margin-top: 2px; }
+.recent-item .score {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+/* ==================== 场景详情浮层 ==================== */
+.modal-overlay {
+  display: none;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 80;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+.scene-modal {
+  width: 100%;
+  background: #111827;
+  border-radius: 24px 24px 0 0;
+  padding: 20px 16px 28px;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.modal-header .icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+}
+.modal-header h3 { font-size: 1.1rem; font-weight: 700; color: #fff; }
+.modal-header p { font-size: 0.75rem; color: #9ca3af; margin-top: 2px; }
+.modal-close {
+  margin-left: auto;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  color: #9ca3af;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.category-item {
+  background: #0a0e1a;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 14px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.category-item:hover, .category-item:active {
+  border-color: rgba(245,158,11,0.3);
+  background: rgba(245,158,11,0.05);
+}
+.category-item .cat-icon { font-size: 1.4rem; margin-bottom: 6px; }
+.category-item .cat-name { font-size: 0.78rem; font-weight: 600; color: #fff; }
+.category-item .cat-count { font-size: 0.65rem; color: #6b7280; margin-top: 2px; }
+
+.modal-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: center;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ==================== PAGE 2: 记录页 ==================== */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 16px;
+}
+.profile-avatar {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #3b82f6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+}
+.profile-info h3 { font-size: 1.05rem; font-weight: 700; color: #fff; }
+.profile-info p { font-size: 0.78rem; color: #9ca3af; margin-top: 2px; }
+.profile-info .vip-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 8px;
+  background: rgba(245,158,11,0.15);
+  color: #f59e0b;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 999px;
+}
+
+/* 统计卡片 */
+.stats-row {
+  display: flex;
+  gap: 10px;
+  margin: 0 16px 16px;
+}
+.stat-card {
+  flex: 1;
+  background: #111827;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 16px 12px;
+  text-align: center;
+}
+.stat-card .num {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+.stat-card .num.gold { color: #f59e0b; }
+.stat-card .num.blue { color: #3b82f6; }
+.stat-card .num.green { color: #10b981; }
+.stat-card .label {
+  font-size: 0.7rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* 能力雷达 */
+.ability-card {
+  margin: 0 16px 16px;
+  padding: 16px;
+}
+.ability-card h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 14px;
+}
+.ability-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.ability-item .name {
+  width: 60px;
+  font-size: 0.78rem;
+  color: #9ca3af;
+  text-align: right;
+  flex-shrink: 0;
+}
+.ability-item .bar-bg {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.ability-item .bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+.ability-item .score {
+  width: 32px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* 历史列表 */
+.history-card {
+  margin: 0 16px 16px;
+  padding: 16px;
+}
+.history-card h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+.history-card h4 .filter {
+  font-size: 0.72rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.history-item:last-child { border-bottom: none; }
+.history-item .h-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.history-item .h-info { flex: 1; }
+.history-item .h-info h5 { font-size: 0.85rem; font-weight: 600; color: #fff; }
+.history-item .h-info p { font-size: 0.7rem; color: #6b7280; margin-top: 2px; }
+.history-item .h-score {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+/* 功能菜单 */
+.menu-card {
+  margin: 0 16px 16px;
+  padding: 8px 0;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+.menu-item .m-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.menu-item .m-name {
+  flex: 1;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
+}
+.menu-item .m-arrow {
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP NAV ===== -->
+<div class="top-nav">
+  <button class="nav-btn active" onclick="showPage('home')">首页 V2</button>
+  <button class="nav-btn" onclick="showPage('scene-modal')">场景浮层</button>
+  <button class="nav-btn" onclick="showPage('record')">记录页</button>
+</div>
+
+<!-- ==================== PAGE 1: 首页 ==================== -->
+<div class="page-section active" id="page-home">
+  <div class="phone-frame">
+    <div class="status-bar"><span class="time">9:41</span><span>5G</span></div>
+    <div class="page-content">
+
+      <!-- 头部 -->
+      <div class="home-header">
+        <div class="home-avatar">🤖</div>
+        <div class="home-greeting">早安，面试达人</div>
+        <div class="home-sub">AI面试官已就位，今天也要加油哦</div>
+      </div>
+
+      <!-- 今日状态 -->
+      <div class="today-status">
+        <div class="status-item">
+          <div class="num">3</div>
+          <div class="label">剩余免费次数</div>
+        </div>
+        <div class="status-item">
+          <div class="num">0</div>
+          <div class="label">今日已练习</div>
+        </div>
+        <div class="status-item">
+          <div class="num">82</div>
+          <div class="label">历史最高分</div>
+        </div>
+      </div>
+
+      <!-- 快速开始 -->
+      <div class="quick-start">
+        <div class="icon">⚡</div>
+        <div class="info">
+          <h3>继续上次的练习</h3>
+          <p>互联网产品经理 · 进阶难度</p>
+        </div>
+        <div class="arrow">›</div>
+      </div>
+
+      <!-- 场景选择 -->
+      <div class="scene-section-title">选择面试场景</div>
+      <div class="scene-card" onclick="showPage('scene-modal')">
+        <div class="scene-icon job">💼</div>
+        <div class="scene-info">
+          <h3>求职面试 <span class="badge badge-amber">热门</span></h3>
+          <p>互联网、金融、快消等 12 个行业</p>
+        </div>
+        <div class="scene-arrow">›</div>
+      </div>
+      <div class="scene-card" onclick="showPage('scene-modal')">
+        <div class="scene-icon kaoyan">📚</div>
+        <div class="scene-info">
+          <h3>考研复试 <span class="badge badge-blue">新增</span></h3>
+          <p>专业课、英语口语、综合素质</p>
+        </div>
+        <div class="scene-arrow">›</div>
+      </div>
+      <div class="scene-card" onclick="showPage('scene-modal')">
+        <div class="scene-icon kaogong">🏛️</div>
+        <div class="scene-info">
+          <h3>考公面试 <span class="badge badge-green">结构化</span></h3>
+          <p>结构化面试、无领导小组讨论</p>
+        </div>
+        <div class="scene-arrow">›</div>
+      </div>
+
+      <!-- 最近练习 -->
+      <div class="recent-section">
+        <div class="recent-section-title">
+          最近练习
+          <span class="more">查看全部 ›</span>
+        </div>
+        <div class="recent-item">
+          <div class="type-icon" style="background: rgba(245,158,11,0.12);">💼</div>
+          <div class="detail">
+            <h4>互联网产品经理</h4>
+            <p>6月29日 · 进阶难度 · 语音模式</p>
+          </div>
+          <div class="score">87</div>
+        </div>
+        <div class="recent-item">
+          <div class="type-icon" style="background: rgba(59,130,246,0.12);">📚</div>
+          <div class="detail">
+            <h4>计算机专业复试</h4>
+            <p>6月28日 · 基础难度 · 文字模式</p>
+          </div>
+          <div class="score">76</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TabBar -->
+    <div class="tab-bar">
+      <div class="tab-item active">
+        <div class="tab-icon">🏠</div>
+        <span>首页</span>
+      </div>
+      <div class="tab-item">
+        <div class="tab-icon">📋</div>
+        <span>记录</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 场景详情浮层 ==================== -->
+<div class="page-section" id="page-scene-modal">
+  <div class="phone-frame">
+    <div class="status-bar"><span class="time">9:41</span><span>5G</span></div>
+    <div class="page-content">
+
+      <!-- 复用首页内容作为背景 -->
+      <div style="opacity: 0.3; pointer-events: none;">
+        <div class="home-header">
+          <div class="home-avatar">🤖</div>
+          <div class="home-greeting">早安，面试达人</div>
+        </div>
+        <div class="scene-card">
+          <div class="scene-icon job">💼</div>
+          <div class="scene-info"><h3>求职面试</h3></div>
+        </div>
+      </div>
+
+      <!-- 浮层 -->
+      <div class="modal-overlay active">
+        <div class="scene-modal">
+          <div class="modal-header">
+            <div class="icon job" style="background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(245,158,11,0.05));">💼</div>
+            <div>
+              <h3>求职面试</h3>
+              <p>选择目标岗位，开始针对性练习</p>
+            </div>
+            <div class="modal-close" onclick="showPage('home')">✕</div>
+          </div>
+
+          <div class="category-grid">
+            <div class="category-item">
+              <div class="cat-icon">💻</div>
+              <div class="cat-name">互联网</div>
+              <div class="cat-count">68 题</div>
+            </div>
+            <div class="category-item">
+              <div class="cat-icon">🏦</div>
+              <div class="cat-name">金融</div>
+              <div class="cat-count">45 题</div>
+            </div>
+            <div class="category-item">
+              <div class="cat-icon">🛒</div>
+              <div class="cat-name">快消</div>
+              <div class="cat-count">32 题</div>
+            </div>
+            <div class="category-item">
+              <div class="cat-icon">🏭</div>
+              <div class="cat-name">制造业</div>
+              <div class="cat-count">28 题</div>
+            </div>
+            <div class="category-item">
+              <div class="cat-icon">📊</div>
+              <div class="cat-name">咨询</div>
+              <div class="cat-count">36 题</div>
+            </div>
+            <div class="category-item">
+              <div class="cat-icon">🏥</div>
+              <div class="cat-name">医疗</div>
+              <div class="cat-count">24 题</div>
+            </div>
+          </div>
+
+          <button class="modal-btn">选择岗位后进入准备</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-item active"><div class="tab-icon">🏠</div><span>首页</span></div>
+      <div class="tab-item"><div class="tab-icon">📋</div><span>记录</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3: 记录页 ==================== -->
+<div class="page-section" id="page-record">
+  <div class="phone-frame">
+    <div class="status-bar"><span class="time">9:41</span><span>5G</span></div>
+    <div class="page-content">
+
+      <!-- 个人信息 -->
+      <div class="profile-header">
+        <div class="profile-avatar">👤</div>
+        <div class="profile-info">
+          <h3>面试达人</h3>
+          <p>已练习 12 次 · 平均 79 分</p>
+          <span class="vip-badge">免费版</span>
+        </div>
+      </div>
+
+      <!-- 统计数据 -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="num gold">12</div>
+          <div class="label">总练习次数</div>
+        </div>
+        <div class="stat-card">
+          <div class="num blue">79</div>
+          <div class="label">平均分</div>
+        </div>
+        <div class="stat-card">
+          <div class="num green">5h</div>
+          <div class="label">练习时长</div>
+        </div>
+      </div>
+
+      <!-- 能力分析 -->
+      <div class="card ability-card">
+        <h4>能力分析</h4>
+        <div class="ability-item">
+          <div class="name">表达</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:82%; background: linear-gradient(90deg, #f59e0b, #d97706);"></div></div>
+          <div class="score">82</div>
+        </div>
+        <div class="ability-item">
+          <div class="name">逻辑</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:75%; background: linear-gradient(90deg, #3b82f6, #2563eb);"></div></div>
+          <div class="score">75</div>
+        </div>
+        <div class="ability-item">
+          <div class="name">专业</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:68%; background: linear-gradient(90deg, #10b981, #059669);"></div></div>
+          <div class="score">68</div>
+        </div>
+        <div class="ability-item">
+          <div class="name">应变</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:80%; background: linear-gradient(90deg, #8b5cf6, #7c3aed);"></div></div>
+          <div class="score">80</div>
+        </div>
+        <div class="ability-item">
+          <div class="name">礼仪</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:90%; background: linear-gradient(90deg, #ec4899, #db2777);"></div></div>
+          <div class="score">90</div>
+        </div>
+      </div>
+
+      <!-- 历史记录 -->
+      <div class="card history-card">
+        <h4>面试历史 <span class="filter">全部 ›</span></h4>
+        <div class="history-item">
+          <div class="h-icon" style="background: rgba(245,158,11,0.12);">💼</div>
+          <div class="h-info">
+            <h5>互联网产品经理</h5>
+            <p>6月29日 14:32 · 进阶 · 语音</p>
+          </div>
+          <div class="h-score">87</div>
+        </div>
+        <div class="history-item">
+          <div class="h-icon" style="background: rgba(59,130,246,0.12);">📚</div>
+          <div class="h-info">
+            <h5>计算机专业复试</h5>
+            <p>6月28日 09:15 · 基础 · 文字</p>
+          </div>
+          <div class="h-score">76</div>
+        </div>
+        <div class="history-item">
+          <div class="h-icon" style="background: rgba(16,185,129,0.12);">🏛️</div>
+          <div class="h-info">
+            <h5>公务员结构化面试</h5>
+            <p>6月27日 20:00 · 挑战 · 语音</p>
+          </div>
+          <div class="h-score">81</div>
+        </div>
+      </div>
+
+      <!-- 功能菜单 -->
+      <div class="card menu-card">
+        <div class="menu-item">
+          <div class="m-icon" style="background: rgba(245,158,11,0.12);">⭐</div>
+          <div class="m-name">收藏题目</div>
+          <div class="m-arrow">›</div>
+        </div>
+        <div class="menu-item">
+          <div class="m-icon" style="background: rgba(59,130,246,0.12);">📈</div>
+          <div class="m-name">练习统计</div>
+          <div class="m-arrow">›</div>
+        </div>
+        <div class="menu-item">
+          <div class="m-icon" style="background: rgba(16,185,129,0.12);">⚙️</div>
+          <div class="m-name">设置</div>
+          <div class="m-arrow">›</div>
+        </div>
+        <div class="menu-item">
+          <div class="m-icon" style="background: rgba(139,92,246,0.12);">👑</div>
+          <div class="m-name">升级会员</div>
+          <div class="m-arrow">›</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-item"><div class="tab-icon">🏠</div><span>首页</span></div>
+      <div class="tab-item active"><div class="tab-icon">📋</div><span>记录</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(page) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

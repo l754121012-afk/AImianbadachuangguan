@@ -1,0 +1,27 @@
+<view class="modal-mask" bindtap="onClose">
+  <view class="modal-content" catchtap="">
+    <!-- 头部 -->
+    <view class="modal-header">
+      <view class="modal-icon-wrap {{scene.color}}">
+        <text>{{scene.icon}}</text>
+      </view>
+      <view class="modal-info">
+        <view class="modal-title">{{scene.name}}</view>
+        <view class="modal-desc">选择目标分类，开始针对性练习</view>
+      </view>
+      <view class="modal-close" catchtap="onClose">✕</view>
+    </view>
+
+    <!-- 分类网格 -->
+    <view class="category-grid">
+      <view class="category-item" wx:for="{{scene.categories}}" wx:key="name" data-name="{{item.name}}" bindtap="onSelectCategory">
+        <view class="cat-icon">{{item.icon}}</view>
+        <view class="cat-name">{{item.name}}</view>
+        <view class="cat-count">{{item.count}}</view>
+      </view>
+    </view>
+
+    <!-- 底部按钮 -->
+    <view class="modal-btn" bindtap="onStart">选择分类后进入准备</view>
+  </view>
+</view>
