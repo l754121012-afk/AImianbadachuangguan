@@ -4,7 +4,9 @@
     "pages/record/record",
     "pages/prepare/prepare",
     "pages/interview/interview",
-    "pages/report/report"
+    "pages/report/report",
+    "pages/favorites/favorites",
+    "pages/settings/settings"
   ],
   "window": {
     "backgroundTextStyle": "light",

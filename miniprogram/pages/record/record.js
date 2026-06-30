@@ -3,6 +3,7 @@ const app = getApp();
 Page({
   data: {
     isVip: false,
+    nickname: '面试达人',
     totalCount: 12,
     avgScore: 79,
     totalTime: '5h',
@@ -36,7 +37,6 @@ Page({
         avgScore: Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
       });
     } else {
-      // 演示数据
       this.setData({
         historyList: [
           { id: 1, title: '互联网产品经理', date: '6月29日', time: '14:32', difficulty: '进阶', mode: '语音', score: 87, icon: '💼', color: 'job' },
@@ -49,7 +49,22 @@ Page({
     }
   },
 
-  // 点击历史记录项 → 查看报告
+  // 点击头像更换昵称
+  onChangeNickname() {
+    wx.showModal({
+      title: '修改昵称',
+      editable: true,
+      placeholderText: '请输入新昵称',
+      success: (res) => {
+        if (res.confirm && res.content) {
+          this.setData({ nickname: res.content });
+          wx.showToast({ title: '修改成功', icon: 'success' });
+        }
+      }
+    });
+  },
+
+  // 点击历史记录项
   onTapHistory(e) {
     const item = e.currentTarget.dataset.item;
     wx.navigateTo({
@@ -61,16 +76,15 @@ Page({
     const menu = e.currentTarget.dataset.menu;
     switch (menu) {
       case 'favorites':
-        wx.showToast({ title: '收藏题目功能开发中', icon: 'none' });
+        wx.navigateTo({ url: '/pages/favorites/favorites' });
         break;
       case 'stats':
         wx.showToast({ title: '练习统计功能开发中', icon: 'none' });
         break;
       case 'settings':
-        wx.showToast({ title: '设置功能开发中', icon: 'none' });
+        wx.navigateTo({ url: '/pages/settings/settings' });
         break;
       case 'upgrade':
-        // 跳转到报告页触发付费弹窗
         wx.navigateTo({ url: '/pages/report/report?from=upgrade' });
         break;
     }

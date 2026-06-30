@@ -80,12 +80,12 @@ Page({
         highScore: Math.max(...history.map(h => h.score))
       });
     } else {
-      // 演示数据（completed=true表示已完成，可查看报告）
+      // 演示数据：已完成的显示分数，未完成的显示进度
       this.setData({
         recentList: [
-          { id: 1, title: '互联网产品经理', date: '6月29日', difficulty: '进阶', mode: '语音', score: 87, icon: '💼', color: 'job', scene: 'job', completed: true, questionIndex: 5 },
-          { id: 2, title: '计算机专业复试', date: '6月28日', difficulty: '基础', mode: '文字', score: 76, icon: '📚', color: 'kaoyan', scene: 'kaoyan', completed: true, questionIndex: 5 },
-          { id: 3, title: '公务员结构化面试', date: '6月27日', difficulty: '挑战', mode: '语音', score: 81, icon: '🏛️', color: 'kaogong', scene: 'kaogong', completed: false, questionIndex: 3 }
+          { id: 1, title: '互联网产品经理', date: '6月29日', difficulty: '进阶', mode: '语音', score: 87, icon: '💼', color: 'job', scene: 'job', completed: true, questionIndex: 5, totalQuestions: 5 },
+          { id: 2, title: '计算机专业复试', date: '6月28日', difficulty: '基础', mode: '文字', score: 76, icon: '📚', color: 'kaoyan', scene: 'kaoyan', completed: true, questionIndex: 5, totalQuestions: 5 },
+          { id: 3, title: '公务员结构化面试', date: '6月27日', difficulty: '挑战', mode: '语音', score: null, icon: '🏛️', color: 'kaogong', scene: 'kaogong', completed: false, questionIndex: 3, totalQuestions: 5 }
         ],
         highScore: 87
       });
@@ -101,10 +101,26 @@ Page({
         url: '/pages/report/report?score=' + item.score + '&title=' + encodeURIComponent(item.title)
       });
     } else {
-      // 未完成 → 继续面试
-      app.globalData.currentScene = item.scene;
-      wx.navigateTo({
-        url: '/pages/interview/interview?continue=1&questionIndex=' + item.questionIndex + '&title=' + encodeURIComponent(item.title)
+      // 未完成 → 弹窗询问继续还是重来
+      wx.showModal({
+        title: '继续练习',
+        content: '当前进度：第' + item.questionIndex + '/' + item.totalQuestions + '题，是否继续上次进度？',
+        confirmText: '继续',
+        cancelText: '从头开始',
+        success: (res) => {
+          app.globalData.currentScene = item.scene;
+          if (res.confirm) {
+            // 继续上次进度
+            wx.navigateTo({
+              url: '/pages/interview/interview?continue=1&questionIndex=' + item.questionIndex + '&title=' + encodeURIComponent(item.title)
+            });
+          } else {
+            // 从头开始
+            wx.navigateTo({
+              url: '/pages/interview/interview?title=' + encodeURIComponent(item.title)
+            });
+          }
+        }
       });
     }
   },

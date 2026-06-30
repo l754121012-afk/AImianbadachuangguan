@@ -74,6 +74,7 @@
   flex-shrink: 0;
 }
 
+/* ===== 分类网格 ===== */
 .category-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -87,28 +88,40 @@
   border-radius: 24rpx;
   padding: 28rpx 16rpx;
   text-align: center;
-  transition: all 0.2s;
+  position: relative;
+  transition: all 0.25s ease;
 }
 
 .category-item:active {
-  border-color: rgba(245,158,11,0.3);
-  background: rgba(245,158,11,0.05);
+  transform: scale(0.96);
 }
 
+/* 选中状态 */
 .category-item.selected {
   border-color: #f59e0b;
   background: rgba(245,158,11,0.08);
+  box-shadow: 0 0 20rpx rgba(245,158,11,0.15);
 }
 
 .cat-icon {
   font-size: 56rpx;
   margin-bottom: 12rpx;
+  transition: transform 0.2s;
+}
+
+.category-item.selected .cat-icon {
+  transform: scale(1.15);
 }
 
 .cat-name {
   font-size: 28rpx;
   font-weight: 600;
   color: #fff;
+  transition: color 0.2s;
+}
+
+.category-item.selected .cat-name {
+  color: #f59e0b;
 }
 
 .cat-count {
@@ -117,13 +130,44 @@
   margin-top: 4rpx;
 }
 
+/* 选中勾选标记 */
+.cat-check {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: #f59e0b;
+  color: #000;
+  font-size: 22rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: popIn 0.25s ease;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ===== 底部按钮 ===== */
 .modal-btn {
   width: 100%;
   padding: 28rpx;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #000;
+  background: rgba(255,255,255,0.06);
+  color: #6b7280;
   font-weight: 700;
-  font-size: 32rpx;
+  font-size: 30rpx;
   text-align: center;
   border-radius: 28rpx;
+  transition: all 0.3s;
+}
+
+.modal-btn.active {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000;
 }

@@ -91,12 +91,12 @@
   position: relative;
 }
 
-.recent-continue {
-  border-color: rgba(245,158,11,0.2);
-  background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(245,158,11,0.02));
+.recent-ongoing {
+  border-color: rgba(59,130,246,0.2);
+  background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(59,130,246,0.02));
 }
 
-.recent-continue-badge {
+.recent-badge {
   position: absolute;
   top: -12rpx;
   right: 24rpx;
@@ -106,6 +106,10 @@
   font-weight: 700;
   padding: 4rpx 16rpx;
   border-radius: 16rpx;
+}
+
+.recent-ongoing .recent-badge {
+  background: #3b82f6;
 }
 
 .recent-icon-wrap {
@@ -143,11 +147,30 @@
   margin-top: 4rpx;
 }
 
+.ongoing-tag {
+  color: #3b82f6;
+  font-weight: 600;
+  margin-left: 8rpx;
+}
+
+.recent-right {
+  flex-shrink: 0;
+  text-align: right;
+}
+
 .recent-score {
   font-size: 40rpx;
   font-weight: 800;
   color: #f59e0b;
-  flex-shrink: 0;
+}
+
+.recent-continue-btn {
+  font-size: 24rpx;
+  color: #3b82f6;
+  font-weight: 600;
+  padding: 8rpx 16rpx;
+  background: rgba(59,130,246,0.1);
+  border-radius: 12rpx;
 }
 
 .recent-empty {

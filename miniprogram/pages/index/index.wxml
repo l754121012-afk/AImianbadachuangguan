@@ -25,16 +25,24 @@
   <!-- 最近练习（含继续练习） -->
   <view class="section-title">最近练习</view>
   <view class="recent-list" wx:if="{{recentList.length > 0}}">
-    <view class="recent-item {{index === 0 ? 'recent-continue' : ''}}" wx:for="{{recentList}}" wx:key="id" data-item="{{item}}" bindtap="onTapRecent">
-      <view class="recent-continue-badge" wx:if="{{index === 0}}">继续练习</view>
+    <view class="recent-item {{!item.completed ? 'recent-ongoing' : ''}}" wx:for="{{recentList}}" wx:key="id" data-item="{{item}}" bindtap="onTapRecent">
+      <view class="recent-badge" wx:if="{{index === 0}}">
+        {{item.completed ? '继续练习' : '进行中'}}
+      </view>
       <view class="recent-icon-wrap {{item.color}}">
         <text>{{item.icon}}</text>
       </view>
       <view class="recent-info">
         <view class="recent-title">{{item.title}}</view>
-        <view class="recent-meta">{{item.date}} · {{item.difficulty}} · {{item.mode}}</view>
+        <view class="recent-meta">
+          {{item.date}} · {{item.difficulty}} · {{item.mode}}
+          <text wx:if="{{!item.completed}}" class="ongoing-tag">已完成 {{item.questionIndex}}/{{item.totalQuestions}}</text>
+        </view>
       </view>
-      <view class="recent-score">{{item.score}}</view>
+      <view class="recent-right">
+        <text wx:if="{{item.completed}}" class="recent-score">{{item.score}}</text>
+        <text wx:else class="recent-continue-btn">继续 ▶</text>
+      </view>
     </view>
   </view>
   <view class="recent-empty" wx:else>

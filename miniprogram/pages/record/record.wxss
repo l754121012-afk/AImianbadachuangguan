@@ -10,6 +10,7 @@
   align-items: center;
   gap: 28rpx;
   padding: 40rpx 0 32rpx;
+  position: relative;
 }
 
 .profile-avatar {
@@ -50,6 +51,12 @@
 .vip-badge.vip-active {
   background: rgba(139,92,246,0.15);
   color: #a78bfa;
+}
+
+.profile-arrow {
+  margin-left: auto;
+  color: #4b5563;
+  font-size: 24rpx;
 }
 
 /* 统计 */

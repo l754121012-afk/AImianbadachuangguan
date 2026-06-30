@@ -4,72 +4,61 @@
   background: #0a0e1a;
 }
 
+/* ===== 主视觉：C-S等级大徽章 ===== */
 .report-hero {
   text-align: center;
-  padding: 48rpx 32rpx 40rpx;
-  background: linear-gradient(180deg, rgba(245,158,11,0.06) 0%, transparent 100%);
+  padding: 56rpx 32rpx 40rpx;
 }
 
-.score-ring {
-  width: 280rpx;
-  height: 280rpx;
-  margin: 0 auto 24rpx;
+.grade-circle {
+  width: 220rpx;
+  height: 220rpx;
+  margin: 0 auto 20rpx;
   border-radius: 50%;
-  border: 12rpx solid rgba(255,255,255,0.06);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.score-ring::before {
-  content: '';
-  position: absolute;
-  inset: -12rpx;
-  border-radius: 50%;
-  border: 12rpx solid transparent;
-  border-top-color: #f59e0b;
-  border-right-color: #f59e0b;
-  transform: rotate(-30deg);
-}
-
-.score-inner {
+  border: 6rpx solid;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.grade-badge {
-  width: 64rpx;
-  height: 64rpx;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 32rpx;
-  font-weight: 800;
-  margin-bottom: 12rpx;
-  border: 2rpx solid;
+  box-shadow: 0 0 60rpx rgba(245,158,11,0.15);
 }
 
-.score-number {
-  font-size: 80rpx;
-  font-weight: 800;
-  color: #f59e0b;
+.grade-letter {
+  font-size: 96rpx;
+  font-weight: 900;
   line-height: 1;
 }
 
-.score-label {
+.grade-desc-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-top: 8rpx;
+  opacity: 0.9;
+}
+
+/* ===== 辅助数字分数（弱化） ===== */
+.score-secondary {
+  margin-bottom: 8rpx;
+}
+
+.score-num {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #9ca3af;
+}
+
+.score-unit {
+  font-size: 24rpx;
+  color: #6b7280;
+  margin-left: 4rpx;
+}
+
+.score-subtitle {
   font-size: 26rpx;
   color: #6b7280;
-  margin-top: 8rpx;
 }
 
-.grade-desc {
-  font-size: 28rpx;
-  font-weight: 700;
-}
-
+/* ===== 维度条 ===== */
 .section-title {
   font-size: 30rpx;
   font-weight: 700;
@@ -120,6 +109,7 @@
   text-align: right;
 }
 
+/* ===== 题目卡片 ===== */
 .q-card {
   margin-bottom: 20rpx;
   padding: 28rpx;

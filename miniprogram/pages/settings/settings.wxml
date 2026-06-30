@@ -1,0 +1,28 @@
+<view class="page-settings">
+  <view class="card">
+    <view class="setting-item" bindtap="onChangeNickname">
+      <text class="setting-name">昵称</text>
+      <text class="setting-value">{{nickname}}</text>
+      <text class="setting-arrow">▶</text>
+    </view>
+    <view class="setting-item">
+      <text class="setting-name">语音播报</text>
+      <switch checked="{{voiceEnabled}}" bindchange="onToggleVoice" color="#f59e0b"/>
+    </view>
+    <view class="setting-item">
+      <text class="setting-name">消息通知</text>
+      <switch checked="{{notificationEnabled}}" bindchange="onToggleNotification" color="#f59e0b"/>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="setting-item" bindtap="onClearCache">
+      <text class="setting-name">清除缓存</text>
+      <text class="setting-arrow">▶</text>
+    </view>
+    <view class="setting-item" bindtap="onAbout">
+      <text class="setting-name">关于</text>
+      <text class="setting-arrow">▶</text>
+    </view>
+  </view>
+</view>
