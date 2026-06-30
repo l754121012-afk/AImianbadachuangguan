@@ -20,11 +20,11 @@ Page({
     ],
     showPayment: false,
     isVip: false,
-    fromUpgrade: false
+    fromUpgrade: false,
+    unlockedTitle: ''
   },
 
   onLoad(options) {
-    // 接收参数
     let score = 87;
     let title = '综合评分';
 
@@ -35,13 +35,8 @@ Page({
       title = decodeURIComponent(options.title);
     }
 
-    // 计算C-S等级
     const gradeInfo = scoreToGradeInfo(score);
-
-    // 根据分数动态设置百分位
     const percentile = Math.min(95, Math.round(score * 0.9));
-
-    // 如果是从升级入口进入，自动弹出付费弹窗
     const fromUpgrade = options.from === 'upgrade';
 
     this.setData({
@@ -53,10 +48,37 @@ Page({
       fromUpgrade
     });
 
+    // 计算并解锁称号
+    this.checkUnlockTitles(score);
+
     if (fromUpgrade && !app.globalData.isVip) {
-      setTimeout(() => {
-        this.setData({ showPayment: true });
-      }, 500);
+      setTimeout(() => { this.setData({ showPayment: true }); }, 500);
+    }
+  },
+
+  checkUnlockTitles(score) {
+    const history = app.globalData.interviewHistory;
+    const totalCount = history.length;
+    const avgScore = totalCount > 0
+      ? Math.round(history.reduce((s, h) => s + h.score, 0) / totalCount)
+      : score;
+
+    const abilities = this.data.dimensions.map(d => ({ name: d.name.substring(0, 2), score: d.score }));
+
+    const newTitles = app.calculateTitles({ totalCount, avgScore, abilities });
+    const profile = app.getUserProfile();
+
+    // 如果解锁了新称号，提示用户
+    const oldTitles = app.getUnlockedTitles();
+    const newlyUnlocked = newTitles.filter(t => !oldTitles.includes(t));
+    if (newlyUnlocked.length > 0) {
+      // 自动升级到最高级称号
+      const titlePriority = ['面神', '面霸', '面试达人', '顶尖高手', '优秀选手', '合格选手', '面试新手', '面试小白'];
+      const bestTitle = titlePriority.find(t => newTitles.includes(t)) || '面试小白';
+      profile.title = bestTitle;
+      app.setUserProfile(profile);
+      this.setData({ unlockedTitle: newlyUnlocked[0] });
+      wx.showToast({ title: '解锁称号：' + newlyUnlocked[0], icon: 'none', duration: 2000 });
     }
   },
 
@@ -83,12 +105,10 @@ Page({
     const { score, gradeInfo } = this.data;
     return {
       title: `我的AI面试获得${gradeInfo.grade}评级！你也来试试？`,
-      path: '/pages/index/index',
-      imageUrl: '/assets/share-poster.png'
+      path: '/pages/index/index'
     };
   },
 
-  // 重新练习
   onRetry() {
     wx.navigateTo({ url: '/pages/prepare/prepare' });
   }

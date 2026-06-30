@@ -1,9 +1,14 @@
 <view class="page-record">
   <!-- 个人信息 -->
-  <view class="profile-header" bindtap="onChangeNickname">
-    <view class="profile-avatar">👤</view>
+  <view class="profile-header" bindtap="onTapAvatar">
+    <view class="profile-avatar">
+      <image wx:if="{{avatar.indexOf('http') === 0 || avatar.indexOf('wxfile') === 0}}"
+             class="avatar-img" src="{{avatar}}" mode="aspectFill"/>
+      <text wx:else class="avatar-emoji">{{avatar}}</text>
+    </view>
     <view class="profile-info">
       <view class="profile-name">{{nickname}}</view>
+      <view class="profile-title">🏆 {{title}}</view>
       <view class="profile-meta">已练习 {{totalCount}} 次 · 平均 {{avgScore}} 分</view>
       <view class="vip-badge {{isVip ? 'vip-active' : ''}}">{{isVip ? 'Pro年卡' : '免费版'}}</view>
     </view>

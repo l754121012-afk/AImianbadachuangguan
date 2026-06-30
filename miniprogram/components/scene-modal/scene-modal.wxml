@@ -1,5 +1,5 @@
 <view class="modal-mask" bindtap="onClose">
-  <view class="modal-content" catchtap="">
+  <view class="modal-content" catchtap="onContentTap">
     <!-- 头部 -->
     <view class="modal-header">
       <view class="modal-icon-wrap {{scene.color}}">
@@ -16,7 +16,7 @@
     <view class="category-grid">
       <view class="category-item {{selectedCategory === item.name ? 'selected' : ''}}"
             wx:for="{{scene.categories}}" wx:key="name"
-            data-name="{{item.name}}" bindtap="onSelectCategory">
+            data-name="{{item.name}}" catchtap="onSelectCategory">
         <view class="cat-icon">{{item.icon}}</view>
         <view class="cat-name">{{item.name}}</view>
         <view class="cat-count">{{item.count}}</view>
@@ -25,7 +25,7 @@
     </view>
 
     <!-- 底部按钮 -->
-    <view class="modal-btn {{selectedCategory ? 'active' : ''}}" bindtap="onStart">
+    <view class="modal-btn {{selectedCategory ? 'active' : ''}}" catchtap="onStart">
       {{selectedCategory ? '进入准备：' + selectedCategory : '请先选择一个分类'}}
     </view>
   </view>

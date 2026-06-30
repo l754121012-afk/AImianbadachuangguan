@@ -6,7 +6,8 @@
     "pages/interview/interview",
     "pages/report/report",
     "pages/favorites/favorites",
-    "pages/settings/settings"
+    "pages/settings/settings",
+    "pages/avatar/avatar"
   ],
   "window": {
     "backgroundTextStyle": "light",

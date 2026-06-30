@@ -1,11 +1,13 @@
 const app = getApp();
+const { getQuestions, getDefaultJob } = require('../../data/questions.js');
 
 Page({
   data: {
     freeCount: 3,
     isVip: false,
     highScore: '--',
-    greeting: '你好，面试达人',
+    greeting: '你好',
+    greetingName: '面试达人',
     showSceneModal: false,
     currentModalScene: null,
     recentList: [],
@@ -58,74 +60,100 @@ Page({
   },
 
   refreshData() {
+    const profile = app.getUserProfile();
+    const hour = new Date().getHours();
+    let greet = '你好';
+    if (hour < 6) greet = '夜深了';
+    else if (hour < 12) greet = '早安';
+    else if (hour < 14) greet = '午安';
+    else if (hour < 18) greet = '下午好';
+    else greet = '晚上好';
+
+    const name = profile.greetingMode === 'nickname' ? profile.nickname : profile.title;
+
     this.setData({
       freeCount: app.globalData.freeCount,
-      isVip: app.globalData.isVip
+      isVip: app.globalData.isVip,
+      greeting: greet,
+      greetingName: name
     });
-    // 设置问候语
-    const hour = new Date().getHours();
-    let greeting = '你好';
-    if (hour < 6) greeting = '夜深了';
-    else if (hour < 12) greeting = '早安';
-    else if (hour < 14) greeting = '午安';
-    else if (hour < 18) greeting = '下午好';
-    else greeting = '晚上好';
-    this.setData({ greeting: greeting + '，面试达人' });
 
-    // 模拟最近练习数据（后续接入云数据库）
+    // 从本地存储加载面试历史
     const history = app.globalData.interviewHistory;
-    if (history && history.length > 0) {
-      this.setData({
-        recentList: history.slice(0, 3),
-        highScore: Math.max(...history.map(h => h.score))
-      });
-    } else {
-      // 演示数据：已完成的显示分数，未完成的显示进度
-      this.setData({
-        recentList: [
-          { id: 1, title: '互联网产品经理', date: '6月29日', difficulty: '进阶', mode: '语音', score: 87, icon: '💼', color: 'job', scene: 'job', completed: true, questionIndex: 5, totalQuestions: 5 },
-          { id: 2, title: '计算机专业复试', date: '6月28日', difficulty: '基础', mode: '文字', score: 76, icon: '📚', color: 'kaoyan', scene: 'kaoyan', completed: true, questionIndex: 5, totalQuestions: 5 },
-          { id: 3, title: '公务员结构化面试', date: '6月27日', difficulty: '挑战', mode: '语音', score: null, icon: '🏛️', color: 'kaogong', scene: 'kaogong', completed: false, questionIndex: 3, totalQuestions: 5 }
-        ],
-        highScore: 87
+    const progress = app.getInterviewProgress();
+
+    let recentList = [];
+
+    // 如果有进行中的面试，放在第一位
+    if (progress) {
+      recentList.push({
+        id: 'progress',
+        title: progress.job || '进行中',
+        date: '进行中',
+        difficulty: progress.difficulty,
+        mode: progress.mode === 'voice' ? '语音' : '文字',
+        score: null,
+        icon: progress.scene === 'job' ? '💼' : progress.scene === 'kaoyan' ? '📚' : '🏛️',
+        color: progress.scene || 'job',
+        scene: progress.scene,
+        completed: false,
+        questionIndex: progress.currentQuestion || 1,
+        totalQuestions: progress.questions ? progress.questions.length : 5
       });
     }
+
+    // 添加历史记录
+    if (history && history.length > 0) {
+      history.slice(0, 3).forEach(h => {
+        recentList.push({
+          ...h,
+          completed: true,
+          totalQuestions: 5
+        });
+      });
+      const scores = history.filter(h => h.score).map(h => h.score);
+      if (scores.length > 0) {
+        this.setData({ highScore: Math.max(...scores) });
+      }
+    } else {
+      // 演示数据（仅在没有真实数据时显示）
+      if (!progress) {
+        recentList.push(
+          { id: 1, title: '互联网产品经理', date: '6月29日', difficulty: '进阶', mode: '语音', score: 87, icon: '💼', color: 'job', scene: 'job', completed: true, totalQuestions: 5 },
+          { id: 2, title: '计算机专业复试', date: '6月28日', difficulty: '基础', mode: '文字', score: 76, icon: '📚', color: 'kaoyan', scene: 'kaoyan', completed: true, totalQuestions: 5 }
+        );
+        this.setData({ highScore: 87 });
+      }
+    }
+
+    this.setData({ recentList });
   },
 
   // 点击最近练习项
   onTapRecent(e) {
     const item = e.currentTarget.dataset.item;
-    if (item.completed) {
-      // 已完成 → 查看报告
-      wx.navigateTo({
-        url: '/pages/report/report?score=' + item.score + '&title=' + encodeURIComponent(item.title)
-      });
-    } else {
-      // 未完成 → 弹窗询问继续还是重来
+    if (item.id === 'progress' || !item.completed) {
       wx.showModal({
         title: '继续练习',
         content: '当前进度：第' + item.questionIndex + '/' + item.totalQuestions + '题，是否继续上次进度？',
         confirmText: '继续',
         cancelText: '从头开始',
         success: (res) => {
-          app.globalData.currentScene = item.scene;
           if (res.confirm) {
-            // 继续上次进度
-            wx.navigateTo({
-              url: '/pages/interview/interview?continue=1&questionIndex=' + item.questionIndex + '&title=' + encodeURIComponent(item.title)
-            });
+            wx.navigateTo({ url: '/pages/interview/interview?continue=1' });
           } else {
-            // 从头开始
-            wx.navigateTo({
-              url: '/pages/interview/interview?title=' + encodeURIComponent(item.title)
-            });
+            app.clearInterviewProgress();
+            wx.navigateTo({ url: '/pages/interview/interview' });
           }
         }
+      });
+    } else {
+      wx.navigateTo({
+        url: '/pages/report/report?score=' + item.score + '&title=' + encodeURIComponent(item.title)
       });
     }
   },
 
-  // 点击场景卡片 → 弹出浮层
   onSelectScene(e) {
     const scene = e.currentTarget.dataset.scene;
     this.setData({
@@ -134,12 +162,10 @@ Page({
     });
   },
 
-  // 关闭浮层
   onCloseModal() {
     this.setData({ showSceneModal: false });
   },
 
-  // 选择岗位/科目 → 进入准备页
   onSelectCategory(e) {
     const { sceneId, categoryName } = e.detail;
     app.globalData.currentScene = sceneId;

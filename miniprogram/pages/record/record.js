@@ -4,15 +4,17 @@ Page({
   data: {
     isVip: false,
     nickname: '面试达人',
-    totalCount: 12,
-    avgScore: 79,
-    totalTime: '5h',
+    title: '面试小白',
+    avatar: '👤',
+    totalCount: 0,
+    avgScore: 0,
+    totalTime: '0h',
     abilities: [
-      { name: '表达', score: 82, color: 'linear-gradient(90deg, #f59e0b, #d97706)' },
-      { name: '逻辑', score: 75, color: 'linear-gradient(90deg, #3b82f6, #2563eb)' },
-      { name: '专业', score: 68, color: 'linear-gradient(90deg, #10b981, #059669)' },
-      { name: '应变', score: 80, color: 'linear-gradient(90deg, #8b5cf6, #7c3aed)' },
-      { name: '礼仪', score: 90, color: 'linear-gradient(90deg, #ec4899, #db2777)' }
+      { name: '表达', score: 0, color: 'linear-gradient(90deg, #f59e0b, #d97706)' },
+      { name: '逻辑', score: 0, color: 'linear-gradient(90deg, #3b82f6, #2563eb)' },
+      { name: '专业', score: 0, color: 'linear-gradient(90deg, #10b981, #059669)' },
+      { name: '应变', score: 0, color: 'linear-gradient(90deg, #8b5cf6, #7c3aed)' },
+      { name: '礼仪', score: 0, color: 'linear-gradient(90deg, #ec4899, #db2777)' }
     ],
     historyList: []
   },
@@ -26,42 +28,63 @@ Page({
   },
 
   refreshData() {
-    this.setData({ isVip: app.globalData.isVip });
-
+    const profile = app.getUserProfile();
     const history = app.globalData.interviewHistory;
+
+    this.setData({
+      isVip: app.globalData.isVip,
+      nickname: profile.nickname,
+      title: profile.title,
+      avatar: profile.avatar
+    });
+
     if (history && history.length > 0) {
       const scores = history.map(h => h.score);
+      const totalCount = history.length;
+      const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+
+      // 模拟能力数据（后续从真实评分计算）
+      const baseScores = [82, 75, 68, 80, 90];
+      const abilities = [
+        { name: '表达', score: Math.min(100, baseScores[0] + totalCount * 2), color: 'linear-gradient(90deg, #f59e0b, #d97706)' },
+        { name: '逻辑', score: Math.min(100, baseScores[1] + totalCount * 2), color: 'linear-gradient(90deg, #3b82f6, #2563eb)' },
+        { name: '专业', score: Math.min(100, baseScores[2] + totalCount * 2), color: 'linear-gradient(90deg, #10b981, #059669)' },
+        { name: '应变', score: Math.min(100, baseScores[3] + totalCount * 2), color: 'linear-gradient(90deg, #8b5cf6, #7c3aed)' },
+        { name: '礼仪', score: Math.min(100, baseScores[4] + totalCount * 2), color: 'linear-gradient(90deg, #ec4899, #db2777)' }
+      ];
+
       this.setData({
-        historyList: history,
-        totalCount: history.length,
-        avgScore: Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+        historyList: history.slice(0, 5),
+        totalCount,
+        avgScore,
+        totalTime: Math.round(totalCount * 0.5) + 'h',
+        abilities
       });
     } else {
+      // 演示数据
       this.setData({
         historyList: [
           { id: 1, title: '互联网产品经理', date: '6月29日', time: '14:32', difficulty: '进阶', mode: '语音', score: 87, icon: '💼', color: 'job' },
           { id: 2, title: '计算机专业复试', date: '6月28日', time: '09:15', difficulty: '基础', mode: '文字', score: 76, icon: '📚', color: 'kaoyan' },
-          { id: 3, title: '公务员结构化面试', date: '6月27日', time: '20:00', difficulty: '挑战', mode: '语音', score: 81, icon: '🏛️', color: 'kaogong' },
-          { id: 4, title: '快消管培生', date: '6月26日', time: '16:45', difficulty: '基础', mode: '语音', score: 72, icon: '💼', color: 'job' },
-          { id: 5, title: '金融投行', date: '6月25日', time: '10:30', difficulty: '挑战', mode: '文字', score: 78, icon: '💼', color: 'job' }
+          { id: 3, title: '公务员结构化面试', date: '6月27日', time: '20:00', difficulty: '挑战', mode: '语音', score: 81, icon: '🏛️', color: 'kaogong' }
+        ],
+        totalCount: 12,
+        avgScore: 79,
+        totalTime: '5h',
+        abilities: [
+          { name: '表达', score: 82, color: 'linear-gradient(90deg, #f59e0b, #d97706)' },
+          { name: '逻辑', score: 75, color: 'linear-gradient(90deg, #3b82f6, #2563eb)' },
+          { name: '专业', score: 68, color: 'linear-gradient(90deg, #10b981, #059669)' },
+          { name: '应变', score: 80, color: 'linear-gradient(90deg, #8b5cf6, #7c3aed)' },
+          { name: '礼仪', score: 90, color: 'linear-gradient(90deg, #ec4899, #db2777)' }
         ]
       });
     }
   },
 
-  // 点击头像更换昵称
-  onChangeNickname() {
-    wx.showModal({
-      title: '修改昵称',
-      editable: true,
-      placeholderText: '请输入新昵称',
-      success: (res) => {
-        if (res.confirm && res.content) {
-          this.setData({ nickname: res.content });
-          wx.showToast({ title: '修改成功', icon: 'success' });
-        }
-      }
-    });
+  // 点击头像更换
+  onTapAvatar() {
+    wx.navigateTo({ url: '/pages/avatar/avatar' });
   },
 
   // 点击历史记录项

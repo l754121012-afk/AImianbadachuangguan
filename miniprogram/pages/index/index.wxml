@@ -2,7 +2,7 @@
   <!-- 头部 -->
   <view class="home-header">
     <view class="home-avatar">🤖</view>
-    <view class="home-greeting">{{greeting}}</view>
+    <view class="home-greeting">{{greeting}}，{{greetingName}}</view>
     <view class="home-sub">AI面试官已就位，今天也要加油哦</view>
   </view>
 
@@ -13,7 +13,7 @@
       <text class="status-label">剩余免费次数</text>
     </view>
     <view class="status-item">
-      <text class="status-num">0</text>
+      <text class="status-num">{{recentList.filter(r=>r.completed).length}}</text>
       <text class="status-label">今日已练习</text>
     </view>
     <view class="status-item">
@@ -22,7 +22,7 @@
     </view>
   </view>
 
-  <!-- 最近练习（含继续练习） -->
+  <!-- 最近练习 -->
   <view class="section-title">最近练习</view>
   <view class="recent-list" wx:if="{{recentList.length > 0}}">
     <view class="recent-item {{!item.completed ? 'recent-ongoing' : ''}}" wx:for="{{recentList}}" wx:key="id" data-item="{{item}}" bindtap="onTapRecent">
@@ -65,6 +65,5 @@
     <view class="scene-arrow">▶</view>
   </view>
 
-  <!-- 场景详情浮层 -->
   <scene-modal wx:if="{{showSceneModal}}" scene="{{currentModalScene}}" bind:close="onCloseModal" bind:select="onSelectCategory"></scene-modal>
 </view>

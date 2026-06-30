@@ -11,6 +11,11 @@ Component({
   },
 
   methods: {
+    // 阻止内容区域冒泡（兜底）
+    onContentTap() {
+      // do nothing, just stop propagation
+    },
+
     onSelectCategory(e) {
       const name = e.currentTarget.dataset.name;
       this.setData({ selectedCategory: name });
