@@ -11,9 +11,9 @@
 }
 
 .score-ring {
-  width: 240rpx;
-  height: 240rpx;
-  margin: 0 auto 20rpx;
+  width: 280rpx;
+  height: 280rpx;
+  margin: 0 auto 24rpx;
   border-radius: 50%;
   border: 12rpx solid rgba(255,255,255,0.06);
   display: flex;
@@ -39,8 +39,21 @@
   align-items: center;
 }
 
+.grade-badge {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 800;
+  margin-bottom: 12rpx;
+  border: 2rpx solid;
+}
+
 .score-number {
-  font-size: 96rpx;
+  font-size: 80rpx;
   font-weight: 800;
   color: #f59e0b;
   line-height: 1;
@@ -49,12 +62,11 @@
 .score-label {
   font-size: 26rpx;
   color: #6b7280;
-  margin-top: 4rpx;
+  margin-top: 8rpx;
 }
 
-.score-tag {
-  font-size: 26rpx;
-  color: #10b981;
+.grade-desc {
+  font-size: 28rpx;
   font-weight: 700;
 }
 

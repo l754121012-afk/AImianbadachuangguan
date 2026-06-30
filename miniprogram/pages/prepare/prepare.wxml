@@ -1,4 +1,10 @@
 <view class="page-prepare">
+  <!-- 场景标题 -->
+  <view class="scene-header">
+    <view class="scene-tag">{{sceneTitle}}</view>
+    <view class="scene-category" wx:if="{{categoryName}}">{{categoryName}}</view>
+  </view>
+
   <!-- 岗位选择 -->
   <view class="form-group">
     <view class="form-label">💼 选择岗位</view>

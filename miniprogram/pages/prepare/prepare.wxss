@@ -4,6 +4,27 @@
   background: #0a0e1a;
 }
 
+.scene-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 32rpx;
+}
+
+.scene-tag {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.scene-category {
+  font-size: 24rpx;
+  color: #f59e0b;
+  background: rgba(245,158,11,0.1);
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+}
+
 .diff-pills {
   display: flex;
   gap: 16rpx;

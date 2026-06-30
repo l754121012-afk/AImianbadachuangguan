@@ -3,17 +3,18 @@
   <view class="report-hero">
     <view class="score-ring">
       <view class="score-inner">
+        <view class="grade-badge" style="background: {{gradeInfo.bg}}; color: {{gradeInfo.text}}; border-color: {{gradeInfo.border}};">
+          {{gradeInfo.grade}}
+        </view>
         <view class="score-number">{{score}}</view>
-        <view class="score-label">综合评分</view>
+        <view class="score-label">{{interviewTitle}}</view>
       </view>
     </view>
-    <view class="score-tag">🏆 表现优秀，超过{{percentile}}%的用户</view>
+    <view class="grade-desc" style="color: {{gradeInfo.text}};">{{gradeInfo.desc}} · 超过{{percentile}}%的用户</view>
   </view>
 
-  <!-- 雷达图标题 -->
-  <view class="section-title">五维能力分析</view>
-
   <!-- 维度条 -->
+  <view class="section-title">五维能力分析</view>
   <view class="dimension-list">
     <view class="dim-item" wx:for="{{dimensions}}" wx:key="name">
       <view class="dim-label">{{item.name}}</view>
@@ -45,6 +46,7 @@
   <!-- 操作按钮 -->
   <view class="btn-primary" wx:if="{{!isVip}}" bindtap="onUnlock">🔒 解锁完整报告</view>
   <view class="btn-outline" bindtap="onShare">📷 分享到朋友圈</view>
+  <view class="btn-outline" bindtap="onRetry" style="margin-top: 16rpx;">🔄 再练一次</view>
 </view>
 
 <!-- 付费弹窗 -->

@@ -49,6 +49,14 @@ Page({
     }
   },
 
+  // 点击历史记录项 → 查看报告
+  onTapHistory(e) {
+    const item = e.currentTarget.dataset.item;
+    wx.navigateTo({
+      url: '/pages/report/report?score=' + item.score + '&title=' + encodeURIComponent(item.title)
+    });
+  },
+
   onMenuTap(e) {
     const menu = e.currentTarget.dataset.menu;
     switch (menu) {
@@ -62,7 +70,8 @@ Page({
         wx.showToast({ title: '设置功能开发中', icon: 'none' });
         break;
       case 'upgrade':
-        wx.navigateTo({ url: '/pages/report/report' });
+        // 跳转到报告页触发付费弹窗
+        wx.navigateTo({ url: '/pages/report/report?from=upgrade' });
         break;
     }
   }

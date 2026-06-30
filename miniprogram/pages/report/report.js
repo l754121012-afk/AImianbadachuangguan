@@ -1,9 +1,12 @@
 const app = getApp();
+const { scoreToGradeInfo } = require('../../utils/util.js');
 
 Page({
   data: {
     score: 87,
+    gradeInfo: {},
     percentile: 78,
+    interviewTitle: '综合评分',
     dimensions: [
       { name: '表达逻辑', score: 90 },
       { name: '内容完整', score: 85 },
@@ -16,11 +19,45 @@ Page({
       { id: 2, title: '项目经历', text: '介绍最近的项目经历和困难', feedback: '回答较完整，但缺少具体的量化指标。建议用STAR法则描述。', badge: '待提升' }
     ],
     showPayment: false,
-    isVip: false
+    isVip: false,
+    fromUpgrade: false
   },
 
-  onLoad() {
-    this.setData({ isVip: app.globalData.isVip });
+  onLoad(options) {
+    // 接收参数
+    let score = 87;
+    let title = '综合评分';
+
+    if (options.score) {
+      score = parseInt(options.score);
+    }
+    if (options.title) {
+      title = decodeURIComponent(options.title);
+    }
+
+    // 计算C-S等级
+    const gradeInfo = scoreToGradeInfo(score);
+
+    // 根据分数动态设置百分位
+    const percentile = Math.min(95, Math.round(score * 0.9));
+
+    // 如果是从升级入口进入，自动弹出付费弹窗
+    const fromUpgrade = options.from === 'upgrade';
+
+    this.setData({
+      score,
+      gradeInfo,
+      percentile,
+      interviewTitle: title,
+      isVip: app.globalData.isVip,
+      fromUpgrade
+    });
+
+    if (fromUpgrade && !app.globalData.isVip) {
+      setTimeout(() => {
+        this.setData({ showPayment: true });
+      }, 500);
+    }
   },
 
   onUnlock() {
@@ -43,10 +80,16 @@ Page({
   },
 
   onShareAppMessage() {
+    const { score, gradeInfo } = this.data;
     return {
-      title: '我的AI面试得了87分！你也来试试？',
+      title: `我的AI面试获得${gradeInfo.grade}评级！你也来试试？`,
       path: '/pages/index/index',
       imageUrl: '/assets/share-poster.png'
     };
+  },
+
+  // 重新练习
+  onRetry() {
+    wx.navigateTo({ url: '/pages/prepare/prepare' });
   }
 });

@@ -43,7 +43,7 @@
       <text class="card-title">面试历史</text>
       <text class="card-filter">全部 ▶</text>
     </view>
-    <view class="history-item" wx:for="{{historyList}}" wx:key="id">
+    <view class="history-item" wx:for="{{historyList}}" wx:key="id" data-item="{{item}}" bindtap="onTapHistory">
       <view class="history-icon-wrap {{item.color}}">
         <text>{{item.icon}}</text>
       </view>

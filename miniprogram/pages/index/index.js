@@ -80,26 +80,31 @@ Page({
         highScore: Math.max(...history.map(h => h.score))
       });
     } else {
-      // 演示数据
+      // 演示数据（completed=true表示已完成，可查看报告）
       this.setData({
         recentList: [
-          { id: 1, title: '互联网产品经理', date: '6月29日', difficulty: '进阶', mode: '语音', score: 87, icon: '💼', color: 'job', scene: 'job' },
-          { id: 2, title: '计算机专业复试', date: '6月28日', difficulty: '基础', mode: '文字', score: 76, icon: '📚', color: 'kaoyan', scene: 'kaoyan' },
-          { id: 3, title: '公务员结构化面试', date: '6月27日', difficulty: '挑战', mode: '语音', score: 81, icon: '🏛️', color: 'kaogong', scene: 'kaogong' }
+          { id: 1, title: '互联网产品经理', date: '6月29日', difficulty: '进阶', mode: '语音', score: 87, icon: '💼', color: 'job', scene: 'job', completed: true, questionIndex: 5 },
+          { id: 2, title: '计算机专业复试', date: '6月28日', difficulty: '基础', mode: '文字', score: 76, icon: '📚', color: 'kaoyan', scene: 'kaoyan', completed: true, questionIndex: 5 },
+          { id: 3, title: '公务员结构化面试', date: '6月27日', difficulty: '挑战', mode: '语音', score: 81, icon: '🏛️', color: 'kaogong', scene: 'kaogong', completed: false, questionIndex: 3 }
         ],
         highScore: 87
       });
     }
   },
 
-  // 点击最近练习项（第一项=继续练习）
+  // 点击最近练习项
   onTapRecent(e) {
     const item = e.currentTarget.dataset.item;
-    const scene = this.data.scenes.find(s => s.id === item.scene);
-    if (scene) {
+    if (item.completed) {
+      // 已完成 → 查看报告
+      wx.navigateTo({
+        url: '/pages/report/report?score=' + item.score + '&title=' + encodeURIComponent(item.title)
+      });
+    } else {
+      // 未完成 → 继续面试
       app.globalData.currentScene = item.scene;
       wx.navigateTo({
-        url: '/pages/prepare/prepare?continue=1&title=' + encodeURIComponent(item.title)
+        url: '/pages/interview/interview?continue=1&questionIndex=' + item.questionIndex + '&title=' + encodeURIComponent(item.title)
       });
     }
   },
@@ -125,7 +130,7 @@ Page({
     app.globalData.currentCategory = categoryName;
     this.setData({ showSceneModal: false });
     wx.navigateTo({
-      url: '/pages/prepare/prepare?category=' + encodeURIComponent(categoryName)
+      url: '/pages/prepare/prepare?scene=' + sceneId + '&category=' + encodeURIComponent(categoryName)
     });
   }
 });
