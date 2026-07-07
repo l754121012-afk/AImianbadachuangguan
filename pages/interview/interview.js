@@ -1,6 +1,68 @@
-﻿var app = getApp();
+var app = getApp();
 var VOICE_SERVER = 'http://10.1.2.155:3000';
 var util = require('../../utils/util');
+// 基于内容质量的回答分析评分
+function analyzeAnswer(question, answer, timeSpent) {
+  var result = { score: 0, dimensions: {} };
+
+  // 1. 长度评分 (0-25分)
+  var len = answer.length;
+  var lenScore = 0;
+  if (len >= 200) lenScore = 25;
+  else if (len >= 100) lenScore = 20;
+  else if (len >= 50) lenScore = 15;
+  else if (len >= 20) lenScore = 10;
+  else lenScore = 5;
+  result.dimensions['内容完整'] = Math.min(100, Math.round(lenScore * 4));
+
+  // 2. 关键词/专业术语评分 (0-25分)
+  var proTerms = ['例如', '比如', '首先', '其次', '最后', '总之', '因为', '所以', '通过', '利用', '实现', '优化', '分析', '设计', '方案', '策略', '架构', '流程', '数据', '用户', '体验', '性能', '效率', '目标', '结果', 'STAR', '迭代', '复盘', '总结', '优势', '劣势', '挑战', '解决', '协作', '沟通', '负责', '主导', '参与', '改进', '提升', '降低', '增加', '减少', '模块', '系统', '平台', '工具', '技术', '方法', '框架', '模型', '算法', '指标', '转化', '留存', '活跃', '功能', '需求', '测试', '部署', '上线', '反馈'];
+  var termCount = 0;
+  for (var i = 0; i < proTerms.length; i++) {
+    if (answer.indexOf(proTerms[i]) !== -1) termCount++;
+  }
+  var proScore = Math.min(25, Math.round(termCount * 2.5));
+  result.dimensions['专业深度'] = Math.min(100, Math.round(proScore * 4));
+
+  // 3. 逻辑结构评分 (0-25分) - 检查逻辑连接词和分段
+  var logicWords = ['首先', '其次', '再次', '最后', '第一', '第二', '第三', '一方面', '另一方面', '不但', '而且', '虽然', '但是', '然而', '因此', '综上', '总的来说', '具体来说', '也就是说', '简而言之'];
+  var logicCount = 0;
+  for (var j = 0; j < logicWords.length; j++) {
+    if (answer.indexOf(logicWords[j]) !== -1) logicCount++;
+  }
+  // 有编号或分点也加分
+  var hasNumbers = (/\d[.、)）]/.test(answer));
+  var hasSeparator = (/[；;]/.test(answer));
+  var logicScore = Math.min(25, logicCount * 4 + (hasNumbers ? 5 : 0) + (hasSeparator ? 3 : 0));
+  result.dimensions['表达逻辑'] = Math.min(100, Math.round(logicScore * 4));
+
+  // 4. 时效评分 (0-25分) - 回答时间是否合理
+  var timeScore = 0;
+  if (timeSpent >= 15 && timeSpent <= 120) timeScore = 25;
+  else if (timeSpent >= 10 && timeSpent <= 180) timeScore = 20;
+  else if (timeSpent >= 5) timeScore = 15;
+  else if (timeSpent >= 3) timeScore = 10;
+  else timeScore = 5;
+  result.dimensions['回答时效'] = Math.min(100, Math.round(timeScore * 4));
+
+  // 5. 语言表达评分 (0-25分) - 基于句子完整性和多样性
+  var sentences = answer.split(/[。！？!?]/);
+  var completeSentences = 0;
+  for (var k = 0; k < sentences.length; k++) {
+    if (sentences[k].trim().length >= 5) completeSentences++;
+  }
+  var sentScore = Math.min(20, completeSentences * 3);
+  // 有标点符号使用加分
+  var hasPunctuation = /[，,。.！!？?、]/.test(answer);
+  if (hasPunctuation) sentScore += 5;
+  result.dimensions['语言表达'] = Math.min(100, Math.round(sentScore * 4));
+
+  // 总分 = 四维之和（满分100）
+  result.score = Math.round(lenScore + proScore + logicScore + timeScore + sentScore);
+  result.score = Math.max(10, Math.min(100, result.score));
+
+  return result;
+}
 
 Page({
   data: {
@@ -66,17 +128,14 @@ Page({
   },
 
   initRecorder: function() {
-    this.recorderManager = wx.getRecorderManager();
     var that = this;
+    this.recorderManager = wx.getRecorderManager();
     this.recorderManager.onStart(function() {
-      that.setData({ isRecording: true });
+      that.setData({ isRecording: true, hasRecorded: false });
     });
     this.recorderManager.onStop(function(res) {
       that.tempFilePath = res.tempFilePath;
-      that.setData({
-        isRecording: false,
-        hasRecorded: true
-      });
+      that.setData({ isRecording: false, hasRecorded: true });
       that.recognizeSpeech(res.tempFilePath);
     });
     this.recorderManager.onError(function(err) {
@@ -124,6 +183,44 @@ Page({
         frameSize: 50
       });
     }
+  },
+
+  speakQuestion: function() {
+    var q = this.data.currentQuestion;
+    if (!q || !q.question) return;
+    var that = this;
+    this.setData({ isSpeaking: true });
+    wx.request({
+      url: VOICE_SERVER + '/api/tts',
+      method: 'POST',
+      data: { text: q.question },
+      header: { 'content-type': 'application/json' },
+      success: function(res) {
+        var data = res.data;
+        if (typeof data === 'string') { try { data = JSON.parse(data); } catch(e) {} }
+        if (data && data.code === 0 && data.audio) {
+          var fs = wx.getFileSystemManager();
+          var tmpPath = wx.env.USER_DATA_PATH + '/tts_' + Date.now() + '.mp3';
+          fs.writeFileSync(tmpPath, data.audio, 'base64');
+          if (that.innerAudioContext) { that.innerAudioContext.destroy(); }
+          that.innerAudioContext = wx.createInnerAudioContext();
+          that.innerAudioContext.src = tmpPath;
+          that.innerAudioContext.onEnded(function() {
+            that.setData({ isSpeaking: false });
+            try { fs.unlinkSync(tmpPath); } catch(e) {}
+          });
+          that.innerAudioContext.onError(function() {
+            that.setData({ isSpeaking: false });
+          });
+          that.innerAudioContext.play();
+        } else {
+          that.setData({ isSpeaking: false });
+        }
+      },
+      fail: function() {
+        that.setData({ isSpeaking: false });
+      }
+    });
   },
 
   recognizeSpeech: function(filePath) {
@@ -198,6 +295,12 @@ Page({
     this.setData({ answer: e.detail.value });
   },
 
+  onStopSpeaking: function() {
+    if (this.innerAudioContext) {
+      this.innerAudioContext.stop();
+    }
+    this.setData({ isSpeaking: false });
+  },
   onRepeatQuestion: function() {
     var q = this.data.currentQuestion;
     if (!q) return;
@@ -270,49 +373,15 @@ Page({
     progress.currentQuestion = this.data.questionIndex + 1;
     app.setInterviewProgress(progress);
 
-    var that = this;
-    wx.request({
-      url: VOICE_SERVER + '/score',
-      method: 'POST',
-      data: {
-        question: this.data.currentQuestion.question,
-        reference: this.data.currentQuestion.reference || '',
-        answer: answer
-      },
-      success: function(res) {
-        var score = 0;
-        if (res.data && typeof res.data.score === 'number') {
-          score = res.data.score;
-        } else {
-          var answerLen = answer.length;
-          if (answerLen > 200) score = 85;
-          else if (answerLen > 100) score = 75;
-          else if (answerLen > 50) score = 65;
-          else if (answerLen > 20) score = 55;
-          else score = 40;
-        }
-        answerObj.score = score;
-        app.setInterviewProgress(progress);
-        that.setData({
-          showNext: true,
-          score: score
-        });
-      },
-      fail: function() {
-        var answerLen = answer.length;
-        var score = 70;
-        if (answerLen > 200) score = 85;
-        else if (answerLen > 100) score = 75;
-        else if (answerLen > 50) score = 65;
-        else if (answerLen > 20) score = 55;
-        else score = 40;
-        answerObj.score = score;
-        app.setInterviewProgress(progress);
-        that.setData({
-          showNext: true,
-          score: score
-        });
-      }
+        // 本地内容分析评分
+    var analysis = analyzeAnswer(this.data.currentQuestion.question, answer, timeSpent);
+    var score = analysis.score;
+    answerObj.score = score;
+    answerObj.dimensions = analysis.dimensions;
+    app.setInterviewProgress(progress);
+    this.setData({
+      showNext: true,
+      score: score
     });
   },
 
@@ -349,14 +418,20 @@ Page({
   goToReport: function(progress) {
     this.stopTimer();
     var totalScore = 0;
-    for (var i = 0; i < progress.answers.length; i++) {
-      totalScore += progress.answers[i].score;
+    var answers = progress.answers || [];
+    for (var i = 0; i < answers.length; i++) {
+      totalScore += answers[i].score || 0;
+      // 精简question对象，只保留文本
+      if (answers[i].question && typeof answers[i].question !== 'string') {
+        answers[i].question = answers[i].question.question || '';
+      }
     }
-    var avgScore = Math.round(totalScore / progress.answers.length);
-    var title = progress.category + ' - ' + progress.job;
-    var answersStr = JSON.stringify(progress.answers);
+    var avgScore = answers.length > 0 ? Math.round(totalScore / answers.length) : 0;
+    var title = (progress.category || '') + ' - ' + (progress.job || '');
+    // 用storage传递数据，避免URL过长被截断
+    wx.setStorageSync('reportData', JSON.stringify({ score: avgScore, title: title, answers: answers }));
     wx.redirectTo({
-      url: '/pages/report/report?score=' + avgScore + '&title=' + encodeURIComponent(title) + '&answers=' + encodeURIComponent(answersStr)
+      url: '/pages/report/report?score=' + avgScore + '&title=' + encodeURIComponent(title)
     });
   }
 });

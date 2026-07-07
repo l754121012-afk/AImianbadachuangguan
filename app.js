@@ -1,4 +1,4 @@
-﻿App({
+App({
   globalData: {
     userInfo: null,
     freeCount: 3,
@@ -144,6 +144,11 @@
       return true;
     }
     return false;
+  },
+
+  addFreeCount: function(count) {
+    this.globalData.freeCount += count;
+    wx.setStorageSync('freeCount', this.globalData.freeCount);
   },
 
   canStartInterview: function() {

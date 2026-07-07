@@ -1,4 +1,4 @@
-﻿var app = getApp();
+var app = getApp();
 var _mod = require('../../data/questions.js'); var getQuestions = _mod.getQuestions; var getDefaultJob = _mod.getDefaultJob;;
 
 Page({

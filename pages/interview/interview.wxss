@@ -197,4 +197,13 @@
 }
 .submit-btn {
   flex: 1;
+}.stop-speak-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8rpx 20rpx;
+  background: rgba(255,80,80,0.2);
+  border: 1rpx solid rgba(255,80,80,0.5);
+  border-radius: 20rpx;
+  color: #ff5050;
+  font-size: 24rpx;
 }

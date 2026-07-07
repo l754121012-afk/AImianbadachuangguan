@@ -1,4 +1,4 @@
-﻿var app = getApp();
+var app = getApp();
 var questionsModule = require('../../data/questions.js');
 
 Page({
@@ -12,7 +12,11 @@ Page({
     modes: [
       { id: 'voice', name: '语音面试', sub: '真实模拟体验', icon: '🎙️', active: true },
       { id: 'text', name: '文字面试', sub: '快速练习模式', icon: '⌨️', active: false }
-    ]
+    ],
+    showPayment: false,
+    showAd: false,
+    adCountdown: 5,
+    adTimer: null
   },
 
   onLoad(options) {
@@ -93,9 +97,9 @@ Page({
         cancelText: '看广告',
         success: function(res) {
           if (res.confirm) {
-            wx.navigateTo({ url: '/pages/report/report' });
+            that.setData({ showPayment: true });
           } else if (res.cancel) {
-            wx.showToast({ title: '广告播放中...', icon: 'none' });
+            that.startAdReward();
           }
         }
       });
@@ -125,5 +129,39 @@ Page({
     app.setInterviewProgress(progress);
     app.useFreeCount();
     wx.navigateTo({ url: '/pages/interview/interview' });
-  }
+  },
+
+  startAdReward: function() {
+    var that = this;
+    this.setData({ showAd: true, adCountdown: 5 });
+    var timer = setInterval(function() {
+      var count = that.data.adCountdown - 1;
+      if (count <= 0) {
+        clearInterval(timer);
+        that.setData({ showAd: false, adCountdown: 0 });
+        app.addFreeCount(1);
+        wx.showToast({ title: '奖励已到账 +1次', icon: 'success' });
+      } else {
+        that.setData({ adCountdown: count });
+      }
+    }, 1000);
+    this.setData({ adTimer: timer });
+  },
+
+  onCloseAd: function() {
+    if (this.data.adTimer) {
+      clearInterval(this.data.adTimer);
+    }
+    if (this.data.adCountdown > 0) {
+      wx.showToast({ title: '需观看完整广告', icon: 'none' });
+      return;
+    }
+    this.setData({ showAd: false });
+  },
+
+  onClosePayment: function() {
+    this.setData({ showPayment: false });
+  },
+
+  stopPropagation: function() {}
 });

@@ -1,4 +1,4 @@
-﻿Component({
+Component({
   properties: {
     show: {
       type: Boolean,

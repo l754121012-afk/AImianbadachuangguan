@@ -52,4 +52,24 @@
   </view>
 
   <view class="btn-primary" bindtap="onStartInterview">开始面试</view>
+
+  <!-- 会员支付弹窗 -->
+  <payment-modal show="{{showPayment}}" bind:close="onClosePayment"></payment-modal>
+
+  <!-- 模拟广告弹窗 -->
+  <view class="ad-overlay" wx:if="{{showAd}}" bindtap="onCloseAd">
+    <view class="ad-modal" catchtap="stopPropagation">
+      <view class="ad-close" bindtap="onCloseAd">✕</view>
+      <view class="ad-title">🎉 限时福利</view>
+      <view class="ad-content">
+        <view class="ad-product">
+          <view class="ad-product-icon">🎯</view>
+          <view class="ad-product-name">AI面试教练 Pro版</view>
+          <view class="ad-product-desc">智能题库 + 实时评分 + 五维分析</view>
+        </view>
+        <view class="ad-countdown">广告剩余 {{adCountdown}}s</view>
+      </view>
+      <view class="ad-reward">观看完成可获得 +1 次免费面试机会</view>
+    </view>
+  </view>
 </view>

@@ -10,7 +10,7 @@
     <view class="question-header">
       <text class="question-text">{{currentQuestion.question}}</text>
       <view class="repeat-btn" bindtap="onRepeatQuestion" wx:if="{{!isSpeaking}}">🔊 重复读题</view>
-      <view class="speaking-tip" wx:if="{{isSpeaking}}">🔊 朗读中...</view>
+      <view class="stop-speak-btn" bindtap="onStopSpeaking" wx:if="{{isSpeaking}}">⏹ 停止朗读</view>
     </view>
     <view class="question-hint">提示：{{currentQuestion.hint}}</view>
   </view>
