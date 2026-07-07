@@ -1,0 +1,56 @@
+<view class="interview-container">
+  <!-- 进度条 -->
+  <view class="progress-bar">
+    <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+  </view>
+  <view class="question-info">第 {{questionIndex + 1}}/{{totalQuestions}} 题 | {{formattedTime}}</view>
+
+  <!-- 题目区 -->
+  <view class="question-card card">
+    <view class="question-header">
+      <text class="question-text">{{currentQuestion.question}}</text>
+      <view class="repeat-btn" bindtap="onRepeatQuestion" wx:if="{{!isSpeaking}}">🔊 重复读题</view>
+      <view class="speaking-tip" wx:if="{{isSpeaking}}">🔊 朗读中...</view>
+    </view>
+    <view class="question-hint">提示：{{currentQuestion.hint}}</view>
+  </view>
+
+  <!-- 评分提示 -->
+  <view class="score-tip" wx:if="{{showNext}}">
+    本题得分：<text class="score-value">{{score}}分</text>
+  </view>
+
+  <!-- 录音按钮 -->
+  <view class="record-area">
+    <view class="record-btn {{isRecording ? 'recording' : ''}}" bindtap="onToggleRecording">
+      {{isRecording ? '⏹ 停止录音' : '🎙 开始录音'}}
+    </view>
+    <view class="play-record-btn" bindtap="onPlayRecord" wx:if="{{hasRecorded && !isPlaying}}">▶ 试听录音</view>
+    <view class="recognizing-tip" wx:if="{{isRecognizing}}">识别中...</view>
+  </view>
+
+  <!-- 识别确认弹窗 -->
+  <view class="speech-modal" wx:if="{{showSpeechConfirm}}">
+    <view class="speech-mask" bindtap="onCancelSpeech"></view>
+    <view class="speech-content card">
+      <view class="speech-title">语音识别结果</view>
+      <textarea class="speech-textarea" value="{{speechText}}" bindinput="onSpeechInput" auto-height></textarea>
+      <view class="speech-buttons">
+        <view class="btn-secondary" bindtap="onCancelSpeech">取消</view>
+        <view class="btn-primary" bindtap="onConfirmSpeech">确认使用</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 手动输入 -->
+  <view class="answer-area">
+    <textarea class="answer-input" placeholder="或在此手动输入回答..." value="{{answer}}" bindinput="onAnswerInput" maxlength="2000"></textarea>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-area">
+    <view class="fav-btn" bindtap="onToggleFavorite">{{isFavorited ? '★ 已收藏' : '☆ 收藏题目'}}</view>
+    <view class="btn-primary submit-btn" bindtap="onSubmit" wx:if="{{!showNext}}">提交回答</view>
+    <view class="btn-primary submit-btn" bindtap="onNext" wx:if="{{showNext}}">{{questionIndex + 1 >= totalQuestions ? '查看报告' : '下一题'}}</view>
+  </view>
+</view>

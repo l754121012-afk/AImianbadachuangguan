@@ -1,0 +1,69 @@
+﻿<view class="page-home">
+  <!-- 头部 -->
+  <view class="home-header">
+    <view class="home-avatar">🤖</view>
+    <view class="home-greeting">{{greeting}}，{{greetingName}}</view>
+    <view class="home-sub">AI面试官已就位，今天也要加油哦</view>
+  </view>
+
+  <!-- 今日状态 -->
+  <view class="today-status">
+    <view class="status-item">
+      <text class="status-num">{{freeCount}}</text>
+      <text class="status-label">剩余免费次数</text>
+    </view>
+    <view class="status-item">
+      <text class="status-num">{{completedToday}}</text>
+      <text class="status-label">今日已练习</text>
+    </view>
+    <view class="status-item">
+      <text class="status-num">{{highScore || '--'}}</text>
+      <text class="status-label">历史最高分</text>
+    </view>
+  </view>
+
+  <!-- 最近练习 -->
+  <view class="section-title">最近练习</view>
+  <view class="recent-list" wx:if="{{recentList.length > 0}}">
+    <view class="recent-item {{!item.completed ? 'recent-ongoing' : ''}}" wx:for="{{recentList}}" wx:key="id" data-item="{{item}}" bindtap="onTapRecent">
+      <view class="recent-badge" wx:if="{{index === 0}}">
+        {{item.completed ? '继续练习' : '进行中'}}
+      </view>
+      <view class="recent-icon-wrap {{item.color}}">
+        <text>{{item.icon}}</text>
+      </view>
+      <view class="recent-info">
+        <view class="recent-title">{{item.title}}</view>
+        <view class="recent-meta">
+          {{item.date}} · {{item.difficulty}} · {{item.mode}}
+          <text wx:if="{{!item.completed}}" class="ongoing-tag">已完成 {{item.questionIndex}}/{{item.totalQuestions}}</text>
+        </view>
+      </view>
+      <view class="recent-right">
+        <text wx:if="{{item.completed}}" class="recent-score">{{item.score}}</text>
+        <text wx:else class="recent-continue-btn">继续 ▶</text>
+      </view>
+    </view>
+  </view>
+  <view class="recent-empty" wx:else>
+    <text>暂无练习记录，选择下方场景开始吧</text>
+  </view>
+
+  <!-- 场景选择 -->
+  <view class="section-title">选择面试场景</view>
+  <view class="scene-card" wx:for="{{scenes}}" wx:key="id" data-scene="{{item}}" bindtap="onSelectScene">
+    <view class="scene-icon-wrap {{item.color}}">
+      <text>{{item.icon}}</text>
+    </view>
+    <view class="scene-info">
+      <view class="scene-name">
+        {{item.name}}
+        <text class="badge {{item.badgeColor}}">{{item.badge}}</text>
+      </view>
+      <view class="scene-desc">{{item.desc}}</view>
+    </view>
+    <view class="scene-arrow">▶</view>
+  </view>
+
+  <scene-modal wx:if="{{showSceneModal}}" scene="{{currentModalScene}}" bind:close="onCloseModal" bind:select="onSelectCategory"></scene-modal>
+</view>

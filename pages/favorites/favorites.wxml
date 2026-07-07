@@ -1,0 +1,13 @@
+<view class="page-favorites">
+  <view class="fav-item" wx:for="{{favorites}}" wx:key="id" data-item="{{item}}" bindtap="onTapItem">
+    <view class="fav-info">
+      <view class="fav-title">{{item.title}}</view>
+      <view class="fav-question">{{item.question}}</view>
+      <view class="fav-meta">{{item.scene}} · {{item.date}}</view>
+    </view>
+    <view class="fav-remove" data-id="{{item.id}}" catchtap="onRemove">✕</view>
+  </view>
+  <view class="empty" wx:if="{{favorites.length === 0}}">
+    <text>暂无收藏题目</text>
+  </view>
+</view>

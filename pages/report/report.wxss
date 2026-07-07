@@ -1,0 +1,151 @@
+.page-report {
+  padding: 0 32rpx 40rpx;
+  min-height: 100vh;
+  background: #0a0e1a;
+}
+
+/* ===== 主视觉：C-S等级大徽章 ===== */
+.report-hero {
+  text-align: center;
+  padding: 56rpx 32rpx 40rpx;
+}
+
+.grade-circle {
+  width: 220rpx;
+  height: 220rpx;
+  margin: 0 auto 20rpx;
+  border-radius: 50%;
+  border: 6rpx solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 60rpx rgba(245,158,11,0.15);
+}
+
+.grade-letter {
+  font-size: 96rpx;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.grade-desc-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-top: 8rpx;
+  opacity: 0.9;
+}
+
+/* ===== 辅助数字分数（弱化） ===== */
+.score-secondary {
+  margin-bottom: 8rpx;
+}
+
+.score-num {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #9ca3af;
+}
+
+.score-unit {
+  font-size: 24rpx;
+  color: #6b7280;
+  margin-left: 4rpx;
+}
+
+.score-subtitle {
+  font-size: 26rpx;
+  color: #6b7280;
+}
+
+/* ===== 维度条 ===== */
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #fff;
+  margin: 16rpx 0 20rpx;
+}
+
+.dimension-list {
+  margin-bottom: 32rpx;
+}
+
+.dim-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 24rpx;
+}
+
+.dim-label {
+  width: 144rpx;
+  font-size: 26rpx;
+  color: #9ca3af;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.dim-track {
+  flex: 1;
+  height: 16rpx;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.dim-fill {
+  height: 100%;
+  border-radius: 8rpx;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  transition: width 0.8s;
+}
+
+.dim-value {
+  width: 56rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #f59e0b;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+/* ===== 题目卡片 ===== */
+.q-card {
+  margin-bottom: 20rpx;
+  padding: 28rpx;
+  background: #111827;
+  border-radius: 28rpx;
+  border: 2rpx solid rgba(255,255,255,0.06);
+}
+
+.q-card.locked {
+  opacity: 0.4;
+}
+
+.q-num {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #6b7280;
+  margin-bottom: 8rpx;
+}
+
+.q-title {
+  font-size: 28rpx;
+  color: #e5e7eb;
+  margin-bottom: 16rpx;
+  line-height: 1.4;
+}
+
+.q-feedback {
+  font-size: 26rpx;
+  color: #9ca3af;
+  padding: 16rpx 20rpx;
+  background: rgba(255,255,255,0.03);
+  border-radius: 16rpx;
+  line-height: 1.5;
+}
+
+.q-badge {
+  display: inline-block;
+  margin-top: 12rpx;
+}

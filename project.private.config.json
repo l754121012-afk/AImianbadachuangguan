@@ -1,0 +1,14 @@
+{
+    "setting":  {
+                    "preloadBackgroundData":  false,
+                    "skylineRenderEnable":  false,
+                    "compileHotReLoad":  true,
+                    "lazyloadPlaceholderEnable":  false,
+                    "autoAudits":  false,
+                    "showShadowRootInWxmlPanel":  true,
+                    "urlCheck":  false,
+                    "coverView":  true
+                },
+    "libVersion":  "3.16.1",
+    "projectname":  "Ai%E9%9D%A2%E9%9C%B8%E5%A4%A7%E9%97%AF%E5%85%B3"
+}

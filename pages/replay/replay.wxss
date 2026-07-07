@@ -1,0 +1,55 @@
+.replay-container {
+  padding: 20rpx;
+  min-height: 100vh;
+  background: #0f172a;
+}
+.card {
+  background: #1e293b;
+  border-radius: 16rpx;
+  padding: 30rpx;
+}
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #f9fafb;
+  margin-bottom: 16rpx;
+}
+.replay-info {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+  margin-bottom: 20rpx;
+}
+.question-text {
+  font-size: 17px;
+  font-weight: bold;
+  line-height: 1.6;
+  color: #f9fafb;
+}
+.question-hint {
+  color: #9ca3af;
+  font-size: 13px;
+  margin-top: 12rpx;
+}
+.answer-card {
+  margin-top: 16rpx;
+}
+.answer-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #d1d5db;
+}
+.nav-area {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 40rpx;
+}
+.nav-btn {
+  flex: 1;
+  text-align: center;
+  background: #374151;
+  color: #9ca3af;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  font-size: 15px;
+}

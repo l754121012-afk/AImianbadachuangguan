@@ -1,0 +1,23 @@
+<view class="page-avatar">
+  <view class="section-title">预设头像</view>
+  <view class="avatar-grid">
+    <view class="avatar-item {{selectedAvatar === item ? 'selected' : ''}}"
+          wx:for="{{presetAvatars}}" wx:key="*this"
+          data-avatar="{{item}}" bindtap="onSelectPreset">
+      <text class="avatar-emoji">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="section-title">本地图片</view>
+  <view class="upload-btn" bindtap="onChooseImage">
+    <text class="upload-icon">📷</text>
+    <text class="upload-text">从相册选择</text>
+  </view>
+
+  <view class="preview" wx:if="{{selectedAvatar}}">
+    <view class="preview-label">当前头像</view>
+    <image wx:if="{{selectedAvatar.indexOf('http') === 0 || selectedAvatar.indexOf('wxfile') === 0}}"
+           class="preview-img" src="{{selectedAvatar}}" mode="aspectFill"/>
+    <text wx:else class="preview-emoji">{{selectedAvatar}}</text>
+  </view>
+</view>

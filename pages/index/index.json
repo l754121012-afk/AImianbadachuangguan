@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "scene-modal": "../../components/scene-modal/scene-modal"
+  },
+  "navigationBarTitleText": "AI面霸大闯关"
+}

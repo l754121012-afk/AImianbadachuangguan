@@ -1,0 +1,15 @@
+<view class="replay-container">
+  <view class="replay-info">第 {{currentIndex + 1}}/{{total}} 题</view>
+  <view class="question-card card">
+    <view class="question-text">{{currentQ.question}}</view>
+    <view class="question-hint">提示：{{currentQ.hint}}</view>
+  </view>
+  <view class="answer-card card">
+    <view class="section-title">我的回答</view>
+    <view class="answer-text">{{currentA}}</view>
+  </view>
+  <view class="nav-area">
+    <view class="btn-secondary nav-btn" bindtap="onPrev" style="opacity: {{currentIndex > 0 ? 1 : 0.3}}">上一题</view>
+    <view class="btn-secondary nav-btn" bindtap="onNext" style="opacity: {{currentIndex + 1 < total ? 1 : 0.3}}">下一题</view>
+  </view>
+</view>
