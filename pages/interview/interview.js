@@ -1,5 +1,5 @@
 ﻿var app = getApp();
-var VOICE_SERVER = 'http://127.0.0.1:3000';
+var VOICE_SERVER = 'http://10.1.2.155:3000';
 var util = require('../../utils/util');
 
 Page({
@@ -117,7 +117,11 @@ Page({
       });
       this.recorderManager.start({
         duration: 60000,
-        format: 'mp3'
+        format: 'mp3',
+        sampleRate: 16000,
+        numberOfChannels: 1,
+        encodeBitRate: 48000,
+        frameSize: 50
       });
     }
   },
