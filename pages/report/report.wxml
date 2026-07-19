@@ -1,12 +1,10 @@
 <view class="page-report">
-  <!-- 分数区：C-S等级为主视觉 -->
+  <!-- 分数区：C-S等级为主视觉（所有人可见） -->
   <view class="report-hero">
-    <!-- 大等级徽章 -->
     <view class="grade-circle" style="background: {{gradeInfo.bg}}; border-color: {{gradeInfo.border}};">
       <view class="grade-letter" style="color: {{gradeInfo.text}};">{{gradeInfo.grade}}</view>
       <view class="grade-desc-text" style="color: {{gradeInfo.text}};">{{gradeInfo.desc}}</view>
     </view>
-    <!-- 辅助数字分数 -->
     <view class="score-secondary">
       <text class="score-num">{{score}}</text>
       <text class="score-unit">分</text>
@@ -14,41 +12,81 @@
     <view class="score-subtitle">{{interviewTitle}} · 超过{{percentile}}%的用户</view>
   </view>
 
-  <!-- 维度条 -->
-  <view class="section-title">五维能力分析</view>
-  <view class="dimension-list">
+  <!-- 五维能力分析 -->
+  <view class="section-header">
+    <view class="section-title">五维能力分析</view>
+    <view class="section-badge" wx:if="{{!isUnlocked}}">🔒 预览</view>
+  </view>
+
+  <!-- 免费用户：预览模式（模糊+解锁按钮） -->
+  <view wx:if="{{!isUnlocked}}" class="preview-wrap">
+    <view class="dimension-list preview-blur">
+      <view class="dim-item" wx:for="{{previewDimensions}}" wx:key="name">
+        <view class="dim-label">{{item.name}}</view>
+        <view class="dim-track"><view class="dim-fill dim-fill-dim" style="width: {{item.score}}%"></view></view>
+        <view class="dim-value">{{item.score}}</view>
+      </view>
+    </view>
+    <view class="preview-cover" bindtap="onUnlock">
+      <view class="preview-icon">🔒</view>
+      <view class="preview-text">解锁查看完整五维分析</view>
+      <view class="preview-sub">升级求职季冲刺包，解锁全部能力评估</view>
+    </view>
+  </view>
+
+  <!-- VIP用户：完整五维分析 -->
+  <view wx:if="{{isUnlocked}}" class="dimension-list">
     <view class="dim-item" wx:for="{{dimensions}}" wx:key="name">
       <view class="dim-label">{{item.name}}</view>
-      <view class="dim-track">
-        <view class="dim-fill" style="width: {{item.score}}%"></view>
-      </view>
+      <view class="dim-track"><view class="dim-fill" style="width: {{item.score}}%"></view></view>
       <view class="dim-value">{{item.score}}</view>
     </view>
   </view>
 
   <!-- 逐题分析 -->
-  <view class="section-title">逐题分析</view>
-  <view class="q-card" wx:for="{{questions}}" wx:key="id">
-    <view class="q-num">Q{{item.id}} · {{item.title}}</view>
-    <view class="q-title">{{item.text}}</view>
-    <view class="q-feedback">{{item.feedback}}</view>
-    <view class="q-badge {{item.badge === '优秀' ? 'badge-green' : 'badge-amber'}}">
-      {{item.badge === '优秀' ? '✓' : '▲'}} {{item.badge}}
+  <view class="section-header">
+    <view class="section-title">逐题分析</view>
+    <view class="section-badge" wx:if="{{!isUnlocked}}">预览前{{previewCount}}题</view>
+  </view>
+
+  <view class="q-card" wx:for="{{questions}}" wx:key="id" wx:if="{{item.show || isUnlocked}}">
+    <view class="q-card-inner {{!isUnlocked && !item.show ? 'locked' : ''}}">
+      <view class="q-top-row">
+        <view class="q-num">Q{{item.id}} · {{item.title}}</view>
+        <view class="q-actions">
+          <view class="q-fav {{item.favorited ? 'faved' : ''}}" catchtap="onToggleFav" data-id="{{item.id}}">
+            {{item.favorited ? '★' : '☆'}} 收藏
+          </view>
+          <view class="q-badge badge-{{item.badge}}">{{item.badge}}</view>
+        </view>
+      </view>
+      <view class="q-title">{{item.text}}</view>
+      <view class="q-answer" wx:if="{{item.userAnswer}}">
+        <view class="q-answer-label">你的回答：</view>
+        <view class="q-answer-text">{{item.userAnswer}}</view>
+      </view>
+      <view class="q-feedback">{{item.feedback}}</view>
+      <view class="q-score-row">得分：<text class="q-score-num">{{item.score}}</text> 分</view>
     </view>
   </view>
 
-  <!-- 锁定提示 -->
-  <view class="q-card locked" wx:if="{{!isVip || vipLevel < 2}}">
-    <view class="q-num">Q3 · 行为面试</view>
-    <view class="q-title">🔒 完整报告需解锁</view>
-    <view class="q-feedback">查看Q3-Q5的详细分析，请解锁完整报告</view>
+  <!-- 锁定题目占位 -->
+  <view wx:if="{{!isUnlocked && lockedCount > 0}}" class="q-card locked-card" bindtap="onUnlock">
+    <view class="q-card-inner">
+      <view class="lock-icon">🔒</view>
+      <view class="lock-title">还有 {{lockedCount}} 题详细分析已锁定</view>
+      <view class="lock-desc">升级会员查看完整逐题反馈、评分、改进建议</view>
+      <view class="lock-btn">立即解锁 →</view>
+    </view>
   </view>
 
   <!-- 操作按钮 -->
-  <view class="btn-primary" wx:if="{{!isVip || vipLevel < 2}}" bindtap="onUnlock">🔒 解锁完整报告</view>
-  <view class="btn-outline" bindtap="onShare">📷 分享到朋友圈</view>
-  <view class="btn-outline" bindtap="onRetry" style="margin-top: 16rpx;">🔄 再练一次</view>
-</view>
+  <view class="btn-row">
+    <view class="btn-primary" wx:if="{{!isUnlocked}}" bindtap="onUnlock">🔓 解锁完整报告</view>
+    <view class="btn-outline" bindtap="onShare">📷 分享成绩</view>
+    <view class="btn-outline" bindtap="onRetry">🔄 再练一次</view>
+  </view>
 
-<!-- 付费弹窗 -->
-<payment-modal show="{{showPayment}}" bind:close="onClosePayment" />
+  <!-- 付费弹窗 -->
+  <payment-modal show="{{showPayment}}" bind:close="onClosePayment" />
+</view>

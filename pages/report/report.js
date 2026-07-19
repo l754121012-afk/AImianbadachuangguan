@@ -8,10 +8,14 @@ Page({
     percentile: 78,
     interviewTitle: '综合评分',
     dimensions: [],
+    previewDimensions: [],
     questions: [],
     showPayment: false,
     isVip: false,
     vipLevel: 0,
+    isUnlocked: false,
+    previewCount: 2,
+    lockedCount: 0,
     fromUpgrade: false,
     unlockedTitle: ''
   },
@@ -21,14 +25,10 @@ Page({
     var title = '综合评分';
     var answersData = [];
 
-    if (options.score) {
-      score = parseInt(options.score);
-    }
-    if (options.title) {
-      title = decodeURIComponent(options.title);
-    }
+    if (options.score) { score = parseInt(options.score); }
+    if (options.title) { title = decodeURIComponent(options.title); }
 
-    // 从storage或URL解析回答数据
+    // 从storage读取数据
     try {
       var stored = wx.getStorageSync('reportData');
       if (stored) {
@@ -40,16 +40,10 @@ Page({
       }
     } catch(e) {}
     if (answersData.length === 0 && options.answers) {
-      try {
-        answersData = JSON.parse(decodeURIComponent(options.answers));
-      } catch(e) {}
+      try { answersData = JSON.parse(decodeURIComponent(options.answers)); } catch(e) {}
     }
 
-    if (fromUpgrade && !app.globalData.isVip) {
-      setTimeout(function() { this.setData({ showPayment: true }); }, 500);
-    }
-
-    // 根据每道题的维度数据动态计算五维平均分
+    // 计算五维平均分
     var dimMap = {};
     var dimCount = {};
     for (var ai = 0; ai < answersData.length; ai++) {
@@ -72,7 +66,6 @@ Page({
       dimensions.push({ name: allDimKeys[di], score: avgScore });
     }
 
-    // 如果没有维度数据，基于总分生成默认维度
     if (dimensions.length === 0) {
       var base = score;
       dimensions = [
@@ -84,34 +77,57 @@ Page({
       ];
     }
 
-    // 生成每道题的反馈
+    // 预览维度：降低分数模糊展示
+    var previewDimensions = [];
+    for (var pdi = 0; pdi < dimensions.length; pdi++) {
+      previewDimensions.push({ name: dimensions[pdi].name, score: Math.round(dimensions[pdi].score * 0.7) });
+    }
+
+    // 加载收藏数据
+    var favorites = [];
+    try {
+      var favData = wx.getStorageSync('questionFavorites');
+      if (favData) { favorites = JSON.parse(favData); }
+    } catch(e) {}
+
+    // 生成每道题反馈
     var questions = [];
+    var previewCount = 2;
     for (var qi = 0; qi < answersData.length; qi++) {
       var ans = answersData[qi];
       var qScore = ans.score || 0;
-      var badge = "待提升";
-      var feedback = "回答内容较少，建议更详细地展开论述。";
+      var badge = '待提升';
+      var feedback = '回答内容较少，建议更详细地展开论述。';
       if (qScore >= 85) { badge = '优秀'; feedback = '回答非常出色，逻辑清晰，内容丰富。'; }
       else if (qScore >= 70) { badge = '良好'; feedback = '回答较完整，建议增加具体案例和数据支撑。'; }
       else if (qScore >= 55) { badge = '合格'; feedback = '回答基本切题，建议使用结构化表达。'; }
       else if (qScore >= 40) { badge = '待提升'; feedback = '回答较为简略，建议从多角度分析问题。'; }
       else { badge = '需努力'; feedback = '回答内容不足，建议多练习结构化表达。'; }
-      var qText = (typeof ans.question === "string") ? ans.question : (ans.question ? ans.question : "");
+      var qText = (typeof ans.question === 'string') ? ans.question : (ans.question ? (ans.question.question || ans.question || '') : '');
+      var favKey = (qText || '第' + (qi+1) + '题');
       questions.push({
         id: qi + 1,
-        title: qText.length > 10 ? qText.substring(0, 10) : (qText || "第" + (qi+1) + "题"),
+        title: qText.length > 10 ? qText.substring(0, 10) : (qText || '第' + (qi+1) + '题'),
         text: qText,
         userAnswer: ans.answer || '',
         feedback: feedback,
         badge: badge,
         score: qScore,
-        time: ans.time || 0
+        time: ans.time || 0,
+        show: qi < previewCount,
+        favorited: favorites.indexOf(favKey) >= 0
       });
     }
 
+    var lockedCount = Math.max(0, questions.length - previewCount);
+
+    // 检查VIP状态
+    var level = app.getVipLevel ? app.getVipLevel() : 0;
+    var isUnlocked = level >= 2;
+
     var gradeInfo = scoreToGradeInfo(score);
     var percentile = Math.min(95, Math.round(score * 0.9));
-    var fromUpgrade = options.from === "upgrade";
+    var fromUpgrade = options.from === 'upgrade';
 
     this.setData({
       score: score,
@@ -119,17 +135,44 @@ Page({
       percentile: percentile,
       interviewTitle: title,
       dimensions: dimensions,
+      previewDimensions: previewDimensions,
       questions: questions,
       isVip: app.globalData.isVip,
-      vipLevel: app.globalData.vipLevel || 0,
+      vipLevel: level,
+      isUnlocked: isUnlocked,
+      previewCount: previewCount,
+      lockedCount: lockedCount,
       fromUpgrade: fromUpgrade
     });
     this.checkUnlockTitles(score);
 
-    if (fromUpgrade && !app.globalData.isVip) {
+    if (fromUpgrade && !isUnlocked) {
       var that = this;
       setTimeout(function() { that.setData({ showPayment: true }); }, 500);
     }
+  },
+
+  onToggleFav: function(e) {
+    var id = e.currentTarget.dataset.id;
+    var questions = this.data.questions;
+    var q = questions[id - 1];
+    if (!q) return;
+    q.favorited = !q.favorited;
+
+    // 更新storage
+    var favorites = [];
+    try {
+      var favData = wx.getStorageSync('questionFavorites');
+      if (favData) { favorites = JSON.parse(favData); }
+    } catch(e) {}
+    var favKey = q.text || '第' + id + '题';
+    var idx = favorites.indexOf(favKey);
+    if (q.favorited && idx < 0) { favorites.push(favKey); }
+    else if (!q.favorited && idx >= 0) { favorites.splice(idx, 1); }
+    wx.setStorageSync('questionFavorites', JSON.stringify(favorites));
+
+    this.setData({ questions: questions });
+    wx.showToast({ title: q.favorited ? '已收藏' : '已取消', icon: 'none' });
   },
 
   checkUnlockTitles: function(score) {
@@ -138,19 +181,24 @@ Page({
     var avgScore = totalCount > 0
       ? (function() { var sum = 0; for (var ri = 0; ri < history.length; ri++) sum += history[ri].score; return Math.round(sum / totalCount); })()
       : score;
-
-    var abilities = []; for (var ai = 0; ai < this.data.dimensions.length; ai++) { var d = this.data.dimensions[ai]; abilities.push({ name: d.name.substring(0, 2), score: d.score }); }
-
+    var abilities = [];
+    for (var ai = 0; ai < this.data.dimensions.length; ai++) {
+      var d = this.data.dimensions[ai];
+      abilities.push({ name: d.name.substring(0, 2), score: d.score });
+    }
     var newTitles = app.calculateTitles({ totalCount: totalCount, avgScore: avgScore, abilities: abilities });
     var profile = app.getUserProfile();
-
-    // 如果解锁了新称号，提示用户
     var oldTitles = app.getUnlockedTitles();
-    var newlyUnlocked = []; for (var ni = 0; ni < newTitles.length; ni++) { if (oldTitles.indexOf(newTitles[ni]) === -1) newlyUnlocked.push(newTitles[ni]); }
+    var newlyUnlocked = [];
+    for (var ni = 0; ni < newTitles.length; ni++) {
+      if (oldTitles.indexOf(newTitles[ni]) === -1) newlyUnlocked.push(newTitles[ni]);
+    }
     if (newlyUnlocked.length > 0) {
-      // 自动升级到最高级称号
       var titlePriority = ['面神', '面霸', '面试达人', '顶尖高手', '优秀选手', '合格选手', '面试新手', '面试小白'];
-      var bestTitle = '面试小白'; for (var ti = 0; ti < titlePriority.length; ti++) { if (newTitles.indexOf(titlePriority[ti]) >= 0) { bestTitle = titlePriority[ti]; break; } }
+      var bestTitle = '面试小白';
+      for (var ti = 0; ti < titlePriority.length; ti++) {
+        if (newTitles.indexOf(titlePriority[ti]) >= 0) { bestTitle = titlePriority[ti]; break; }
+      }
       profile.title = bestTitle;
       app.setUserProfile(profile);
       this.setData({ unlockedTitle: newlyUnlocked[0] });
@@ -161,8 +209,8 @@ Page({
   onUnlock: function() {
     var level = app.getVipLevel ? app.getVipLevel() : 0;
     if (level >= 2) {
+      this.setData({ isUnlocked: true, isVip: true, vipLevel: level });
       wx.showToast({ title: '报告已解锁', icon: 'success' });
-      this.setData({ isVip: true, vipLevel: level });
       return;
     }
     this.setData({ showPayment: true });
@@ -170,7 +218,12 @@ Page({
 
   onVipChanged: function() {
     var level = app.getVipLevel ? app.getVipLevel() : 0;
-    this.setData({ isVip: app.globalData.isVip, vipLevel: level, showPayment: false });
+    this.setData({
+      isUnlocked: level >= 2,
+      isVip: app.globalData.isVip,
+      vipLevel: level,
+      showPayment: false
+    });
     if (level >= 2) {
       wx.showToast({ title: '报告已解锁', icon: 'success' });
     }
@@ -178,18 +231,21 @@ Page({
 
   onClosePayment: function() {
     var level = app.getVipLevel ? app.getVipLevel() : 0;
-    this.setData({ showPayment: false, isVip: app.globalData.isVip, vipLevel: level });
-  },
-
-  onShare: function() {
-    wx.showShareMenu({
-      withShareTicket: true,
-      menus: ['shareAppMessage', 'shareTimeline']
+    this.setData({
+      showPayment: false,
+      isUnlocked: level >= 2,
+      isVip: app.globalData.isVip,
+      vipLevel: level
     });
   },
 
+  onShare: function() {
+    wx.showShareMenu({ withShareTicket: true, menus: ['shareAppMessage', 'shareTimeline'] });
+  },
+
   onShareAppMessage: function() {
-    var score = this.data.score; var gradeInfo = this.data.gradeInfo;
+    var score = this.data.score;
+    var gradeInfo = this.data.gradeInfo;
     return {
       title: '我的AI面试获得' + gradeInfo.grade + '评级！你也来试试？',
       path: '/pages/index/index'
