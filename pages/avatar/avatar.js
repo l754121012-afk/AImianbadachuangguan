@@ -6,7 +6,7 @@ Page({
     selectedAvatar: ''
   },
 
-  onLoad() {
+  onLoad: function() {
     var profile = app.getUserProfile();
     this.setData({ selectedAvatar: profile.avatar || '👤' });
   },

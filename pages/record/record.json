@@ -1,5 +1,5 @@
 {
   "usingComponents": {
-    "payment-modal": "/components/payment-modal/payment-modal",},
+    "payment-modal": "/components/payment-modal/payment-modal"},
   "navigationBarTitleText": "我的记录"
 }

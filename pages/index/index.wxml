@@ -1,9 +1,10 @@
 <view class="page-home">
   <!-- 头部 -->
   <view class="home-header">
-    <view class="home-avatar">🤖</view>
+    <view class="home-avatar" bindtap="onTapAvatar"><text wx:if="{{avatar.indexOf('http') !== 0 && avatar.indexOf('wxfile') !== 0}}">{{avatar || '🤖'}}</text><image wx:else class="home-avatar-img" src="{{avatar}}" mode="aspectFill"/></view>
     <view class="home-greeting">{{greeting}}，{{greetingName}}</view>
     <view class="home-sub">AI面试官已就位，今天也要加油哦</view>
+    <view class="vip-badge" wx:if="{{isVip}}">💎 {{vipLevelName}}</view>
   </view>
 
   <!-- 今日状态 -->

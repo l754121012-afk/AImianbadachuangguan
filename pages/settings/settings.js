@@ -11,7 +11,7 @@ Page({
     notificationEnabled: true
   },
 
-  onLoad() {
+  onLoad: function() {
     this.refreshData();
   },
 
@@ -52,7 +52,7 @@ Page({
   // 选择称号
   onSelectTitle: function() {
     var titles = this.data.unlockedTitles;
-    wx.showActionSheetfunction({
+    wx.showActionSheet({
       itemList: titles,
       success: function(res) {
         var selected = titles[res.tapIndex];

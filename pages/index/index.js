@@ -5,8 +5,10 @@ Page({
   data: {
     freeCount: 3,
     isVip: false,
+    vipLevelName: '免费版',
     highScore: '--',
     greeting: '你好',
+    avatar: '🤖',
     greetingName: '面试达人',
     showSceneModal: false,
     currentModalScene: null,
@@ -170,10 +172,29 @@ Page({
 
   onSelectScene: function(e) {
     var scene = e.currentTarget.dataset.scene;
+    var level = app.getVipLevel ? app.getVipLevel() : 0;
+    if (scene !== 'job' && level < 3) {
+      wx.showModal({
+        title: 'Pro年卡专属',
+        content: '考公/考研题库为Pro年卡会员专属权益',
+        confirmText: '升级Pro',
+        cancelText: '取消',
+        success: function(res) {
+          if (res.confirm) {
+            wx.navigateTo({ url: '/pages/record/record' });
+          }
+        }
+      });
+      return;
+    }
     this.setData({
       currentModalScene: scene,
       showSceneModal: true
     });
+  },
+
+  onTapAvatar: function() {
+    wx.navigateTo({ url: '/pages/avatar/avatar' });
   },
 
   onCloseModal: function() {

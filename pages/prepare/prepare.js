@@ -134,6 +134,11 @@ Page({
 
   startAdReward: function() {
     var that = this;
+    var level = app.getVipLevel ? app.getVipLevel() : 0;
+    if (level >= 2) {
+      wx.showToast({ title: '会员无需看广告', icon: 'none' });
+      return;
+    }
     this.setData({ showAd: true, adCountdown: 5 });
     var timer = setInterval(function() {
       var count = that.data.adCountdown - 1;
