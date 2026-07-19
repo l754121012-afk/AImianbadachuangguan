@@ -35,6 +35,28 @@
   color: #9ca3af;
 }
 
+.home-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  margin-top: 16rpx;
+  flex-wrap: wrap;
+}
+
+.home-title-tag {
+  display: inline-block;
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.title-gray { background: rgba(107,114,128,0.15); color: #9ca3af; }
+.title-blue { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1rpx solid rgba(59,130,246,0.25); }
+.title-gold { background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(59,130,246,0.15)); color: #e9d5ff; border: 1.5rpx solid rgba(139,92,246,0.5); box-shadow: 0 0 24rpx rgba(139,92,246,0.25), 0 0 48rpx rgba(139,92,246,0.08); font-size: 24rpx; padding: 8rpx 24rpx; }
+.title-pro { background: linear-gradient(135deg, #f59e0b, #ffd700, #ffb300, #ffe082, #f59e0b); background-size: 300% 300%; color: #1a1a00; border: 2rpx solid #ffd700; box-shadow: 0 0 24rpx rgba(245,158,11,0.4), 0 0 64rpx rgba(255,215,0,0.2); font-size: 24rpx; padding: 8rpx 24rpx; font-weight: 800; animation: borderRotate 3s linear infinite; }
+
 /* 今日状态 */
 .today-status {
   display: flex;
@@ -261,10 +283,13 @@
 .vip-badge {
   display: inline-block;
   padding: 4rpx 16rpx;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border-radius: 20rpx;
-  font-size: 22rpx;
-  color: #fff;
+  border-radius: 999rpx;
+  font-size: 20rpx;
   font-weight: 600;
-  margin-top: 8rpx;
+  opacity: 0.85;
 }
+.vip-badge-gray { background: rgba(107,114,128,0.15); color: #9ca3af; }
+.vip-badge-blue { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1rpx solid rgba(59,130,246,0.25); }
+.vip-badge-gold { background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(139,92,246,0.1)); color: #c4b5fd; border: 1rpx solid rgba(139,92,246,0.4); box-shadow: 0 0 16rpx rgba(139,92,246,0.15); }
+.vip-badge-pro { background: linear-gradient(135deg, #f59e0b, #ffd700, #ffb300, #ffe082, #f59e0b); background-size: 300% 300%; color: #1a1a00; border: 2rpx solid #ffd700; box-shadow: 0 0 20rpx rgba(245,158,11,0.4), 0 0 56rpx rgba(255,215,0,0.2); font-weight: 800; animation: borderRotate 3s linear infinite; }
+@keyframes borderRotate { 0% { background-position: 0% 0%; } 25% { background-position: 100% 0%; } 50% { background-position: 100% 100%; } 75% { background-position: 0% 100%; } 100% { background-position: 0% 0%; } }

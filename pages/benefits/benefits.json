@@ -1,6 +1,9 @@
 {
-  "navigationBarTitleText": "套餐权益对比",
+  "navigationBarTitleText": "升级会员",
   "navigationBarBackgroundColor": "#0a0e1a",
   "navigationBarTextStyle": "white",
-  "backgroundColor": "#0a0e1a"
+  "backgroundColor": "#0a0e1a",
+  "usingComponents": {
+    "payment-modal": "/components/payment-modal/payment-modal"
+  }
 }

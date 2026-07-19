@@ -172,6 +172,37 @@ App({
     return '免费版';
   },
 
+  getVipTitle: function() {
+    var level = this.globalData.vipLevel || 0;
+    if (level >= 3) return '至尊面霸';
+    if (level >= 2) return '面试达人';
+    if (level >= 1) return '面试新手';
+    return '面试小白';
+  },
+
+  getTitleClass: function(title) {
+    var proTitles = ['至尊面霸', '面神'];
+    var goldTitles = ['面试达人', '面霸', '顶尖高手', '全能选手'];
+    var blueTitles = ['面试新手', '优秀选手', '合格选手', '表达之星', '逻辑之王', '专业精英', '应变大师', '礼仪之星'];
+    for (var i = 0; i < proTitles.length; i++) { if (title === proTitles[i]) return 'title-pro'; }
+    for (var i = 0; i < goldTitles.length; i++) { if (title === goldTitles[i]) return 'title-gold'; }
+    for (var i = 0; i < blueTitles.length; i++) { if (title === blueTitles[i]) return 'title-blue'; }
+    return 'title-gray';
+  },
+
+  syncVipTitle: function() {
+    var vipTitle = this.getVipTitle();
+    var titles = this.getUnlockedTitles();
+    var found = false;
+    for (var i = 0; i < titles.length; i++) {
+      if (titles[i] === vipTitle) { found = true; break; }
+    }
+    if (!found) { titles.push(vipTitle); this.setUnlockedTitles(titles); }
+    var profile = this.getUserProfile();
+    profile.title = vipTitle;
+    this.setUserProfile(profile);
+  },
+
   getVipLevel: function() {
     var level = this.globalData.vipLevel || 0;
     if (level > 0 && this.globalData.vipExpireTime) {

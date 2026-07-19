@@ -41,7 +41,7 @@ Component({
     stopPropagation: function() {},
 
     onPreviewBenefits: function() {
-      wx.navigateTo({ url: '/pages/benefits/benefits' });
+      wx.navigateTo({ url: '/pages/compare/compare' });
     }, 
 
     onPay: function() { 

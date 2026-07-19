@@ -5,21 +5,24 @@
       <image wx:if="{{avatar.indexOf('http') === 0 || avatar.indexOf('wxfile') === 0}}"
              class="avatar-img" src="{{avatar}}" mode="aspectFill"/>
       <text wx:else class="avatar-emoji">{{avatar}}</text>
-      <view class="upgrade-bar" bindtap="onUpgrade">
-    <view class="upgrade-text">💎 {{vipLevelName}} · 点击升级会员</view>
-    <view class="upgrade-arrow">›</view>
+    </view>
+    <view class="profile-info">
+      <view class="profile-name">{{nickname}}</view>
+      <view class="profile-title {{titleClass}}">🏆 {{title}}</view>
+      <view class="vip-badge {{vipBadgeClass}}">💎 {{vipLevelName}}</view>
+    </view>
+    <view class="profile-meta">已练习 {{totalCount}} 次 · 平均 {{avgScore}} 分</view>
+    <view class="profile-arrow">▶</view>
+  </view>
+
+  <view class="upgrade-bar {{vipBadgeClass}}">
+    <view class="upgrade-text">💎 {{vipLevelName}} 会员</view>
+    <view class="upgrade-arrow" bindtap="onUpgrade">升级 ›</view>
   </view>
 
   <payment-modal show="{{showPayment}}" bind:close="onClosePayment" />
-</view>
-    <view class="profile-info">
-      <view class="profile-name">{{nickname}}</view>
-      <view class="profile-title">🏆 {{title}}</view>
-      <view class="profile-meta">已练习 {{totalCount}} 次 · 平均 {{avgScore}} 分</view>
-      <view class="vip-badge {{isVip ? 'vip-active' : ''}}">{{vipLevelName}}</view>
-    </view>
-    <view class="profile-arrow">▶</view>
-  </view>
+
+  <view class="section-divider"></view>
 
   <!-- 统计卡片 -->
   <view class="stats-row">
@@ -55,7 +58,7 @@
       <text class="card-title">面试历史</text>
       <text class="card-filter">全部 ▶</text>
     </view>
-    <view class="history-item" wx:for="{{historyList}}" wx:key="id" data-item="{{item}}" bindtap="onTapHistory">
+    <view class="history-item" wx:for="{{historyList}}" wx:key="id" data-score="{{item.score}}" data-title="{{item.title}}" bindtap="onTapHistory">
       <view class="history-icon-wrap {{item.color}}">
         <text>{{item.icon}}</text>
       </view>

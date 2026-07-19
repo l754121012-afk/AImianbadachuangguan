@@ -1,4 +1,4 @@
-ge-report {
+.page-report {
   padding: 0 32rpx 40rpx;
   min-height: 100vh;
   background: #0a0e1a;
@@ -36,7 +36,6 @@ ge-report {
 .score-unit { font-size: 24rpx; color: #6b7280; margin-left: 4rpx; }
 .score-subtitle { font-size: 26rpx; color: #6b7280; }
 
-/* 区块标题 */
 .section-header {
   display: flex;
   align-items: center;
@@ -56,7 +55,6 @@ ge-report {
   border-radius: 12rpx;
 }
 
-/* 维度条 */
 .dimension-list { margin-bottom: 32rpx; }
 .dim-item {
   display: flex;
@@ -96,7 +94,6 @@ ge-report {
   text-align: right;
 }
 
-/* 预览覆盖 */
 .preview-wrap {
   position: relative;
   margin-bottom: 32rpx;
@@ -133,7 +130,6 @@ ge-report {
   color: #6b7280;
 }
 
-/* 题目卡片 */
 .q-card {
   margin-bottom: 20rpx;
   background: #111827;
@@ -225,7 +221,6 @@ ge-report {
 .badge-improve { background: rgba(239,68,68,0.15); color: #ef4444; }
 .badge-weak { background: rgba(107,114,128,0.15); color: #6b7280; }
 
-/* 锁定卡片 */
 .locked-card {
   border: 2rpx dashed rgba(245,158,11,0.2);
   background: rgba(245,158,11,0.03);
@@ -255,7 +250,189 @@ ge-report {
   font-weight: 600;
 }
 
-/* 按钮 */
+.pro-block {
+  margin-bottom: 24rpx;
+  padding: 28rpx;
+  background: rgba(59,130,246,0.06);
+  border-radius: 24rpx;
+  border-left: 4rpx solid #3b82f6;
+}
+.pro-block-violet {
+  background: rgba(139,92,246,0.06);
+  border-left-color: #8b5cf6;
+}
+.pro-block-green {
+  background: rgba(16,185,129,0.06);
+  border-left: none;
+  text-align: center;
+}
+.pro-block-green .pro-block-header {
+  justify-content: center;
+  gap: 16rpx;
+}
+.pro-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+.pro-block-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+.pro-block-badge {
+  font-size: 20rpx;
+  color: #fff;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  padding: 4rpx 14rpx;
+  border-radius: 10rpx;
+  font-weight: 700;
+}
+.pro-block-text {
+  font-size: 26rpx;
+  color: #9ca3af;
+  line-height: 1.6;
+}
+
+.pro-suggestion {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+.pro-suggestion:last-child {
+  margin-bottom: 0;
+}
+.pro-sug-num {
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pro-sug-text {
+  font-size: 26rpx;
+  color: #9ca3af;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.voice-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  justify-content: center;
+}
+.voice-item {
+  width: calc(50% - 8rpx);
+  max-width: 200rpx;
+  padding: 24rpx 16rpx;
+  background: rgba(255,255,255,0.03);
+  border-radius: 20rpx;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+.voice-icon {
+  font-size: 36rpx;
+}
+.voice-value {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #10b981;
+}
+.voice-label {
+  font-size: 22rpx;
+  color: #6b7280;
+}
+
+.trend-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  height: 200rpx;
+  padding: 0 16rpx;
+  margin-bottom: 16rpx;
+}
+.trend-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  flex: 1;
+}
+.trend-score {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #3b82f6;
+}
+.trend-bar {
+  width: 40rpx;
+  min-height: 8rpx;
+  background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+  border-radius: 8rpx 8rpx 0 0;
+}
+.trend-date {
+  font-size: 20rpx;
+  color: #6b7280;
+  margin-top: 8rpx;
+}
+.trend-summary {
+  text-align: center;
+  font-size: 24rpx;
+  color: #9ca3af;
+  padding: 16rpx;
+  background: rgba(255,255,255,0.02);
+  border-radius: 16rpx;
+}
+.trend-up {
+  color: #10b981;
+  font-weight: 700;
+  font-size: 26rpx;
+}
+
+.pro-locked-area {
+  margin-bottom: 32rpx;
+  padding: 24rpx;
+  background: rgba(139,92,246,0.04);
+  border-radius: 24rpx;
+  border: 2rpx dashed rgba(139,92,246,0.2);
+}
+.pro-locked-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 16rpx;
+  margin-bottom: 16rpx;
+  background: rgba(255,255,255,0.02);
+  border-radius: 16rpx;
+}
+.pro-locked-item:last-child {
+  margin-bottom: 0;
+}
+.pro-lock-icon {
+  font-size: 40rpx;
+  margin-bottom: 8rpx;
+}
+.pro-lock-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #8b5cf6;
+  margin-bottom: 4rpx;
+}
+.pro-lock-desc {
+  font-size: 22rpx;
+  color: #6b7280;
+}
+
 .btn-row {
   display: flex;
   flex-direction: column;

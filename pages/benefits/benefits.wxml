@@ -1,278 +1,49 @@
 <view class="page">
-  <!-- 顶部tab -->
-  <view class="tab-bar">
-    <view class="tab-item {{selectedTab === index ? 'active' : ''}}"
-          wx:for="{{tabs}}" wx:key="*this"
-          data-index="{{index}}" bindtap="onTabTap">
-      {{item}}
-    </view>
+  <view class="hero">
+    <view class="hero-title">选择适合你的套餐</view>
+    <view class="hero-desc">全部场景开放，按需升级AI增值服务</view>
   </view>
 
-  <!-- Tab 0: 权益对比总览 -->
-  <view class="tab-content" wx:if="{{selectedTab === 0}}">
-    <!-- 核心原则 -->
-    <view class="principles">
-      <view class="pr-item">
-        <text class="pr-icon">🎯</text>
-        <text class="pr-text">场景全开放：求职/考研/考公全部免费</text>
+  <view class="tier-grid">
+    <view class="tier-card {{item.recommended ? 'recommended' : ''}}" wx:for="{{tiers}}" wx:key="id">
+      <view class="tier-badge {{item.badgeClass}}">{{item.badge}}</view>
+      <view class="tier-name">{{item.name}}</view>
+      <view class="tier-price">
+        <text class="tier-currency">¥</text>{{item.price}}<text class="tier-unit">/{{item.unit}}</text>
       </view>
-      <view class="pr-item">
-        <text class="pr-icon">🧠</text>
-        <text class="pr-text">AI增值分层：Pro聚焦高级分析服务</text>
-      </view>
-      <view class="pr-item">
-        <text class="pr-icon">📈</text>
-        <text class="pr-text">体验驱动付费：免费可看完整基础功能</text>
-      </view>
-    </view>
-
-    <!-- 套餐卡片 -->
-    <view class="tier-grid">
-      <view class="tier-card {{item.recommended ? 'recommended' : ''}}"
-            wx:for="{{tiers}}" wx:key="id">
-        <view class="tier-badge {{item.badgeClass}}">{{item.badge}}</view>
-        <view class="tier-name">{{item.name}}</view>
-        <view class="tier-price">
-          <text class="tier-currency">¥</text>{{item.price}}<text class="tier-unit">/{{item.unit}}</text>
-        </view>
-        <view class="tier-desc">{{item.desc}}</view>
-
-        <view class="tier-row" wx:for="{{item.rows}}" wx:key="label">
+      <view class="tier-desc">{{item.desc}}</view>
+      <view class="tier-rows">
+        <view class="tier-row" wx:for="{{item.summaryRows}}" wx:key="label">
           <text class="tier-check {{item.check ? 'yes' : 'no'}}">{{item.check ? '✓' : '✗'}}</text>
           <text class="tier-label">{{item.label}}</text>
         </view>
-
-        <view class="tier-highlight" wx:if="{{item.highlight}}">{{item.highlight}}</view>
       </view>
+      <view class="tier-highlight" wx:if="{{item.highlight}}">{{item.highlight}}</view>
+      <view class="tier-btn" data-index="{{index}}" bindtap="onBuy">立即购买</view>
     </view>
   </view>
 
-  <!-- Tab 1: 首页效果 -->
-  <view class="tab-content" wx:if="{{selectedTab === 1}}">
-    <view class="scene-title">
-      <text class="scene-icon">🏠</text>
-      <text class="scene-name">首页 — 全部场景开放，VIP身份标识</text>
+  <view class="principles">
+    <view class="pr-item">
+      <text class="pr-icon">🎯</text>
+      <text class="pr-text">场景全开放：求职/考研/考公全部免费</text>
     </view>
-
-    <view class="mockup-row">
-      <view class="mockup-card">
-        <view class="mockup-header">
-          <text class="mockup-label">免费版</text>
-          <text class="mockup-tier free">💎 免费版</text>
-        </view>
-        <view class="mockup-body">
-          <view class="mu-avatar-row">
-            <view class="mu-avatar">👤</view>
-            <view class="mu-info">
-              <text class="mu-greet">下午好</text>
-              <text class="mu-name">面试达人</text>
-            </view>
-          </view>
-          <view class="mu-stats">
-            <view class="mu-stat"><text class="mu-val">3</text><text class="mu-lbl">剩余次数</text></view>
-            <view class="mu-stat"><text class="mu-val">87</text><text class="mu-lbl">最高分</text></view>
-            <view class="mu-stat"><text class="mu-val">2</text><text class="mu-lbl">今日练习</text></view>
-          </view>
-          <view class="mu-scene"><text>💼 求职面试</text><text class="mu-open">点击进入</text></view>
-          <view class="mu-scene"><text>📚 考研复试</text><text class="mu-open">点击进入</text></view>
-          <view class="mu-scene"><text>🏛️ 考公面试</text><text class="mu-open">点击进入</text></view>
-        </view>
-      </view>
-
-      <view class="mockup-card">
-        <view class="mockup-header">
-          <text class="mockup-label">Pro年卡</text>
-          <text class="mockup-tier pro">💎 Pro年卡</text>
-        </view>
-        <view class="mockup-body">
-          <view class="mu-avatar-row">
-            <view class="mu-avatar">👤</view>
-            <view class="mu-info">
-              <text class="mu-greet">下午好</text>
-              <text class="mu-name">面试达人</text>
-            </view>
-          </view>
-          <view class="mu-stats">
-            <view class="mu-stat"><text class="mu-val mu-inf">∞</text><text class="mu-lbl">无限次数</text></view>
-            <view class="mu-stat"><text class="mu-val">87</text><text class="mu-lbl">最高分</text></view>
-            <view class="mu-stat"><text class="mu-val">5</text><text class="mu-lbl">今日练习</text></view>
-          </view>
-          <view class="mu-scene"><text>💼 求职面试</text><text class="mu-open">点击进入</text></view>
-          <view class="mu-scene"><text>📚 考研复试</text><text class="mu-open">✓ 已解锁</text></view>
-          <view class="mu-scene"><text>🏛️ 考公面试</text><text class="mu-open">✓ 已解锁</text></view>
-          <view class="mu-pro-entry">🧠 AI教练 · 深度分析 ›</view>
-        </view>
-      </view>
+    <view class="pr-item">
+      <text class="pr-icon">🧠</text>
+      <text class="pr-text">AI增值分层：Pro聚焦高级分析服务</text>
+    </view>
+    <view class="pr-item">
+      <text class="pr-icon">📈</text>
+      <text class="pr-text">体验驱动付费：免费可看完整基础功能</text>
     </view>
   </view>
 
-  <!-- Tab 2: 报告效果 -->
-  <view class="tab-content" wx:if="{{selectedTab === 2}}">
-    <view class="scene-title">
-      <text class="scene-icon">📋</text>
-      <text class="scene-name">报告页 — 核心差异化战场</text>
-    </view>
-
-    <view class="mockup-row">
-      <view class="mockup-card">
-        <view class="mockup-header">
-          <text class="mockup-label">免费版</text>
-          <text class="mockup-tier free">💎 免费版</text>
-        </view>
-        <view class="mockup-body">
-          <view class="rp-grade">
-            <view class="rp-circle">
-              <text class="rp-letter">B</text>
-              <text class="rp-desc">良好</text>
-            </view>
-            <view class="rp-info">
-              <text class="rp-score">82分</text>
-              <text class="rp-sub">超越 74% 用户</text>
-            </view>
-          </view>
-
-          <view class="rp-section-title">五维能力分析 <text class="rp-lock">🔒</text></view>
-          <view class="rp-blur">
-            <view class="rp-dim"><text class="rp-dim-label">内容完整</text><view class="rp-dim-track"><view class="rp-dim-fill" style="width:78%"></view></view><text class="rp-dim-val">78</text></view>
-            <view class="rp-dim"><text class="rp-dim-label">表达逻辑</text><view class="rp-dim-track"><view class="rp-dim-fill" style="width:85%"></view></view><text class="rp-dim-val">85</text></view>
-            <view class="rp-cover">
-              <text class="rp-cover-icon">🔒</text>
-              <text class="rp-cover-text">解锁查看完整分析</text>
-            </view>
-          </view>
-
-          <view class="rp-q-card">
-            <text class="rp-q-num">Q1</text>
-            <text class="rp-q-text">请介绍一下你自己...</text>
-            <text class="rp-q-badge">优秀 85</text>
-          </view>
-          <view class="rp-q-card">
-            <text class="rp-q-num">Q2</text>
-            <text class="rp-q-text">你最大的优点是什么？</text>
-            <text class="rp-q-badge">良好 78</text>
-          </view>
-          <view class="rp-locked-card">
-            <text class="rp-lock-icon">🔒</text>
-            <text class="rp-lock-text">剩余3题已锁定</text>
-          </view>
-        </view>
-      </view>
-
-      <view class="mockup-card">
-        <view class="mockup-header">
-          <text class="mockup-label">Pro年卡</text>
-          <text class="mockup-tier pro">💎 Pro年卡</text>
-        </view>
-        <view class="mockup-body">
-          <view class="rp-grade">
-            <view class="rp-circle">
-              <text class="rp-letter">B</text>
-              <text class="rp-desc">良好</text>
-            </view>
-            <view class="rp-info">
-              <text class="rp-score">82分</text>
-              <text class="rp-sub">超越 74% · Pro高级分析</text>
-            </view>
-          </view>
-
-          <view class="rp-section-title">五维能力分析 <text class="rp-unlock">✓ 已解锁</text></view>
-          <view class="rp-dim"><text class="rp-dim-label">内容完整</text><view class="rp-dim-track"><view class="rp-dim-fill" style="width:78%"></view></view><text class="rp-dim-val">78</text></view>
-          <view class="rp-dim"><text class="rp-dim-label">表达逻辑</text><view class="rp-dim-track"><view class="rp-dim-fill" style="width:85%"></view></view><text class="rp-dim-val">85</text></view>
-          <view class="rp-dim"><text class="rp-dim-label">专业深度</text><view class="rp-dim-track"><view class="rp-dim-fill" style="width:72%"></view></view><text class="rp-dim-val">72</text></view>
-
-          <view class="rp-pro-block">
-            <text class="rp-pro-label">🧠 AI深度分析</text>
-            <text class="rp-pro-text">表达逻辑突出(85分)，专业深度(72分)是主要提升空间，建议加强行业案例积累。</text>
-          </view>
-
-          <view class="rp-pro-block">
-            <text class="rp-pro-label">📋 个性化提升建议</text>
-            <text class="rp-pro-item">1. 每周练习2-3道专业深度题</text>
-            <text class="rp-pro-item">2. 使用STAR法则答题模板</text>
-            <text class="rp-pro-item">3. 进行模拟群面练习</text>
-          </view>
-
-          <view class="rp-pro-block">
-            <text class="rp-pro-label">📈 历史趋势</text>
-            <view class="rp-trend">
-              <text class="rp-trend-item">68→72→75→79→</text><text class="rp-trend-now">82</text>
-            </view>
-            <text class="rp-trend-summary">近一个月提升 +14分</text>
-          </view>
-        </view>
-      </view>
-    </view>
+  <view class="compare-entry" bindtap="onCompare">
+    <text class="compare-text">📊 查看不同套餐在各页面的效果对比</text>
+    <text class="compare-arrow">›</text>
   </view>
 
-  <!-- Tab 3: 记录效果 -->
-  <view class="tab-content" wx:if="{{selectedTab === 3}}">
-    <view class="scene-title">
-      <text class="scene-icon">📊</text>
-      <text class="scene-name">记录页 — 成长数据可视化</text>
-    </view>
+  <view class="safe-note">安全支付 · 即时生效 · 支持随时取消</view>
 
-    <view class="mockup-row">
-      <view class="mockup-card">
-        <view class="mockup-header">
-          <text class="mockup-label">免费版</text>
-          <text class="mockup-tier free">💎 免费版</text>
-        </view>
-        <view class="mockup-body">
-          <view class="rc-avatar-row">
-            <view class="rc-avatar">👤</view>
-            <view>
-              <text class="rc-name">面试达人</text>
-              <text class="rc-title">面试小白</text>
-            </view>
-          </view>
-
-          <view class="rc-upgrade">🔓 升级会员解锁全部功能 <text class="rc-upgrade-btn">去升级 ›</text></view>
-
-          <view class="rc-section-title">能力评估</view>
-          <view class="rc-ab"><text class="rc-ab-label">表达</text><view class="rc-ab-track"><view class="rc-ab-fill" style="width:82%"></view></view><text class="rc-ab-val">82</text></view>
-          <view class="rc-ab"><text class="rc-ab-label">逻辑</text><view class="rc-ab-track"><view class="rc-ab-fill" style="width:75%"></view></view><text class="rc-ab-val">75</text></view>
-          <view class="rc-ab"><text class="rc-ab-label">专业</text><view class="rc-ab-track"><view class="rc-ab-fill" style="width:68%"></view></view><text class="rc-ab-val">68</text></view>
-          <text class="rc-more">升级查看完整能力分析 ›</text>
-
-          <view class="rc-section-title">最近练习</view>
-          <view class="rc-hist"><view class="rc-hist-dot"></view><text>产品经理面试</text><text class="rc-hist-score">87</text></view>
-          <view class="rc-hist"><view class="rc-hist-dot"></view><text>计算机复试</text><text class="rc-hist-score">76</text></view>
-        </view>
-      </view>
-
-      <view class="mockup-card">
-        <view class="mockup-header">
-          <text class="mockup-label">Pro年卡</text>
-          <text class="mockup-tier pro">💎 Pro年卡</text>
-        </view>
-        <view class="mockup-body">
-          <view class="rc-avatar-row">
-            <view class="rc-avatar">👤</view>
-            <view>
-              <text class="rc-name">面试达人</text>
-              <text class="rc-title">面试新手 · 表达之星</text>
-            </view>
-          </view>
-
-          <view class="rc-upgrade pro-upgrade">✓ Pro年卡 · 365天后到期 <text class="rc-upgrade-btn">续费 ›</text></view>
-
-          <view class="rc-section-title">能力评估 <text class="rc-full">完整版</text></view>
-          <view class="rc-ab"><text class="rc-ab-label">表达</text><view class="rc-ab-track"><view class="rc-ab-fill" style="width:82%"></view></view><text class="rc-ab-val">82</text></view>
-          <view class="rc-ab"><text class="rc-ab-label">逻辑</text><view class="rc-ab-track"><view class="rc-ab-fill" style="width:75%"></view></view><text class="rc-ab-val">75</text></view>
-          <view class="rc-ab"><text class="rc-ab-label">专业</text><view class="rc-ab-track"><view class="rc-ab-fill" style="width:68%"></view></view><text class="rc-ab-val">68</text></view>
-          <view class="rc-ab"><text class="rc-ab-label">应变</text><view class="rc-ab-track"><view class="rc-ab-fill" style="width:80%"></view></view><text class="rc-ab-val">80</text></view>
-          <view class="rc-ab"><text class="rc-ab-label">礼仪</text><view class="rc-ab-track"><view class="rc-ab-fill" style="width:90%"></view></view><text class="rc-ab-val">90</text></view>
-
-          <view class="rc-pro-block">
-            <text class="rc-pro-label">📈 能力趋势曲线</text>
-            <text class="rc-pro-item">68→72→75→79→82 持续上升</text>
-          </view>
-          <view class="rc-pro-block">
-            <text class="rc-pro-label">🎯 弱项智能诊断</text>
-            <text class="rc-pro-item">专业深度是主要短板，建议专项训练</text>
-          </view>
-        </view>
-      </view>
-    </view>
-  </view>
+  <payment-modal show="{{showPayment}}" bind:close="onClosePayment" />
 </view>

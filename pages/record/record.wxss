@@ -39,31 +39,43 @@
   font-size: 40rpx;
   font-weight: 700;
   color: #fff;
+  margin-bottom: 12rpx;
 }
 
 .profile-title {
+  display: inline-block;
   font-size: 26rpx;
-  color: #f59e0b;
   font-weight: 600;
-  margin-top: 4rpx;
+  margin-bottom: 12rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 16rpx;
 }
+.title-gray { background: rgba(107,114,128,0.15); color: #9ca3af; }
+.title-blue { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1rpx solid rgba(59,130,246,0.25); }
+.title-gold { background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(59,130,246,0.15)); color: #e9d5ff; border: 1.5rpx solid rgba(139,92,246,0.5); box-shadow: 0 0 24rpx rgba(139,92,246,0.25), 0 0 48rpx rgba(139,92,246,0.08); font-size: 24rpx; padding: 8rpx 24rpx; }
+.title-pro { background: linear-gradient(135deg, #f59e0b, #ffd700, #ffb300, #ffe082, #f59e0b); background-size: 300% 300%; color: #1a1a00; border: 2rpx solid #ffd700; box-shadow: 0 0 24rpx rgba(245,158,11,0.4), 0 0 64rpx rgba(255,215,0,0.2); font-size: 24rpx; padding: 8rpx 24rpx; font-weight: 800; animation: borderRotate 3s linear infinite; }
 
 .profile-meta {
-  font-size: 26rpx;
+  position: absolute;
+  top: 40rpx;
+  right: 0;
+  font-size: 24rpx;
   color: #9ca3af;
-  margin-top: 4rpx;
 }
 
 .vip-badge {
   display: inline-block;
-  margin-top: 12rpx;
-  padding: 4rpx 20rpx;
-  background: rgba(245,158,11,0.15);
-  color: #f59e0b;
-  font-size: 22rpx;
-  font-weight: 700;
+  padding: 4rpx 16rpx;
+  font-size: 20rpx;
+  font-weight: 600;
   border-radius: 999rpx;
+  opacity: 0.85;
 }
+
+.vip-badge-gray { background: rgba(107,114,128,0.15); color: #9ca3af; }
+.vip-badge-blue { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1rpx solid rgba(59,130,246,0.25); }
+.vip-badge-gold { background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(139,92,246,0.1)); color: #c4b5fd; border: 1rpx solid rgba(139,92,246,0.4); box-shadow: 0 0 16rpx rgba(139,92,246,0.15); }
+.vip-badge-pro { background: linear-gradient(135deg, #f59e0b, #ffd700, #ffb300, #ffe082, #f59e0b); background-size: 300% 300%; color: #1a1a00; border: 2rpx solid #ffd700; box-shadow: 0 0 20rpx rgba(245,158,11,0.4), 0 0 56rpx rgba(255,215,0,0.2); font-weight: 800; animation: borderRotate 3s linear infinite; }
 
 .vip-badge.vip-active {
   background: rgba(139,92,246,0.15);
@@ -74,6 +86,12 @@
   margin-left: auto;
   color: #4b5563;
   font-size: 24rpx;
+}
+
+.section-divider {
+  height: 2rpx;
+  background: rgba(255,255,255,0.06);
+  margin: 32rpx 0 32rpx;
 }
 
 /* 统计 */
@@ -220,7 +238,7 @@
 .history-meta {
   font-size: 22rpx;
   color: #6b7280;
-  margin-top: 4rpx;
+  margin-bottom: 12rpx;
 }
 
 .history-score {
@@ -276,18 +294,30 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24rpx 32rpx;
-  margin: 24rpx 32rpx;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border-radius: 20rpx;
+  padding: 18rpx 24rpx;
+  margin: 16rpx 24rpx;
+  border-radius: 16rpx;
 }
+.upgrade-bar.vip-badge-gray { background: rgba(107,114,128,0.15); }
+.upgrade-bar.vip-badge-blue { background: rgba(59,130,246,0.12); border: 1rpx solid rgba(59,130,246,0.25); }
+.upgrade-bar.vip-badge-gold { background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(139,92,246,0.1)); border: 1rpx solid rgba(139,92,246,0.4); box-shadow: 0 0 16rpx rgba(139,92,246,0.15); }
+.upgrade-bar.vip-badge-pro { background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(255,200,50,0.1)); border: 1.5rpx solid rgba(245,158,11,0.5); box-shadow: 0 0 20rpx rgba(245,158,11,0.3); }
 .upgrade-text {
-  font-size: 28rpx;
+  font-size: 26rpx;
   font-weight: 600;
   color: #fff;
 }
+.upgrade-bar.vip-badge-gray .upgrade-text { color: #9ca3af; }
+.upgrade-bar.vip-badge-blue .upgrade-text { color: #60a5fa; }
+.upgrade-bar.vip-badge-gold .upgrade-text { color: #c4b5fd; }
+.upgrade-bar.vip-badge-pro .upgrade-text { color: #ffe082; }
 .upgrade-arrow {
-  font-size: 36rpx;
+  font-size: 28rpx;
   color: #fff;
-  font-weight: 700;
+  font-weight: 600;
 }
+.upgrade-bar.vip-badge-gray .upgrade-arrow { color: #9ca3af; }
+.upgrade-bar.vip-badge-blue .upgrade-arrow { color: #60a5fa; }
+.upgrade-bar.vip-badge-gold .upgrade-arrow { color: #c4b5fd; }
+.upgrade-bar.vip-badge-pro .upgrade-arrow { color: #ffe082; }
+@keyframes borderRotate { 0% { background-position: 0% 0%; } 25% { background-position: 100% 0%; } 50% { background-position: 100% 100%; } 75% { background-position: 0% 100%; } 100% { background-position: 0% 0%; } }

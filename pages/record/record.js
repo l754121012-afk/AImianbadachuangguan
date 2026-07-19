@@ -4,6 +4,8 @@ Page({
   data: {
     isVip: false,
     vipLevelName: '免费版',
+    titleClass: 'title-gray',
+    vipBadgeClass: 'vip-badge-gray',
     showPayment: false,
     nickname: '面试达人',
     title: '面试小白',
@@ -33,11 +35,21 @@ Page({
     var profile = app.getUserProfile();
     var history = app.globalData.interviewHistory;
 
+    var vipLevel = app.getVipLevel ? app.getVipLevel() : 0;
+    var userTitle = profile.title || '面试小白';
+    var titleClass = app.getTitleClass ? app.getTitleClass(userTitle) : 'title-gray';
+    var vipBadgeClass = 'vip-badge-gray';
+    if (vipLevel >= 3) { vipBadgeClass = 'vip-badge-pro'; }
+    else if (vipLevel >= 2) { vipBadgeClass = 'vip-badge-gold'; }
+    else if (vipLevel >= 1) { vipBadgeClass = 'vip-badge-blue'; }
+
     this.setData({
       isVip: app.globalData.isVip,
       vipLevelName: app.getVipLevelName ? app.getVipLevelName() : '免费版',
+      titleClass: titleClass,
+      vipBadgeClass: vipBadgeClass,
       nickname: profile.nickname,
-      title: profile.title,
+      title: userTitle,
       avatar: profile.avatar
     });
 
@@ -92,10 +104,15 @@ Page({
 
   // 点击历史记录项
   onTapHistory: function(e) {
-    var item = e.currentTarget.dataset.item;
+    var score = e.currentTarget.dataset.score;
+    var title = e.currentTarget.dataset.title;
     wx.navigateTo({
-      url: '/pages/report/report?score=' + item.score + '&title=' + encodeURIComponent(item.title)
+      url: '/pages/report/report?score=' + score + '&title=' + encodeURIComponent(title)
     });
+  },
+
+  onUpgrade: function() {
+    wx.navigateTo({ url: '/pages/benefits/benefits' });
   },
 
   onMenuTap: function(e) {
@@ -111,7 +128,7 @@ Page({
         wx.navigateTo({ url: '/pages/settings/settings' });
         break;
       case 'upgrade':
-        wx.navigateTo({ url: '/pages/report/report?from=upgrade' });
+        wx.navigateTo({ url: '/pages/benefits/benefits' });
         break;
     }
   }

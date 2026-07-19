@@ -6,7 +6,7 @@ Page({
     title: '面试小白',
     avatar: '👤',
     unlockedTitles: ['面试小白'],
-    greetingMode: 'title', // 'nickname' | 'title'
+    greetingMode: 'title',
     voiceEnabled: true,
     notificationEnabled: true
   },
@@ -21,6 +21,7 @@ Page({
 
   refreshData: function() {
     var profile = app.getUserProfile();
+    app.syncVipTitle();
     var titles = app.getUnlockedTitles();
     this.setData({
       nickname: profile.nickname,
@@ -31,8 +32,8 @@ Page({
     });
   },
 
-  // 修改昵称
   onChangeNickname: function() {
+    var that = this;
     wx.showModal({
       title: '修改昵称',
       editable: true,
@@ -42,15 +43,15 @@ Page({
           var profile = app.getUserProfile();
           profile.nickname = res.content;
           app.setUserProfile(profile);
-          this.setData({ nickname: res.content });
+          that.setData({ nickname: res.content });
           wx.showToast({ title: '修改成功', icon: 'success' });
         }
       }
     });
   },
 
-  // 选择称号
   onSelectTitle: function() {
+    var that = this;
     var titles = this.data.unlockedTitles;
     wx.showActionSheet({
       itemList: titles,
@@ -59,13 +60,12 @@ Page({
         var profile = app.getUserProfile();
         profile.title = selected;
         app.setUserProfile(profile);
-        this.setData({ title: selected });
+        that.setData({ title: selected });
         wx.showToast({ title: '称号已更新', icon: 'success' });
       }
     });
   },
 
-  // 切换问候语模式
   onToggleGreeting: function(e) {
     var mode = e.detail.value ? 'title' : 'nickname';
     var profile = app.getUserProfile();
@@ -83,6 +83,7 @@ Page({
   },
 
   onClearCache: function() {
+    var that = this;
     wx.showModal({
       title: '确认清除',
       content: '将清除所有本地缓存数据',
@@ -90,7 +91,7 @@ Page({
         if (res.confirm) {
           wx.clearStorage();
           wx.showToast({ title: '已清除', icon: 'success' });
-          this.refreshData();
+          that.refreshData();
         }
       }
     });

@@ -6,6 +6,9 @@ Page({
     freeCount: 3,
     isVip: false,
     vipLevelName: '免费版',
+    userTitle: '面试小白',
+    titleClass: 'title-gray',
+    vipBadgeClass: 'vip-badge-gray',
     highScore: '--',
     greeting: '你好',
     avatar: '🤖',
@@ -71,12 +74,23 @@ Page({
     else if (hour < 18) greet = '下午好';
     else greet = '晚上好';
 
-    var name = profile.greetingMode === 'nickname' ? profile.nickname : profile.title;
+    var name = profile.nickname || '面试达人';
+
+    var vipLevel = app.getVipLevel ? app.getVipLevel() : 0;
+    var userTitle = profile.title || '面试小白';
+    var titleClass = app.getTitleClass ? app.getTitleClass(userTitle) : 'title-gray';
+    var vipBadgeClass = 'vip-badge-gray';
+    if (vipLevel >= 3) { vipBadgeClass = 'vip-badge-pro'; }
+    else if (vipLevel >= 2) { vipBadgeClass = 'vip-badge-gold'; }
+    else if (vipLevel >= 1) { vipBadgeClass = 'vip-badge-blue'; }
 
     this.setData({
       freeCount: app.globalData.freeCount,
       isVip: app.globalData.isVip,
       vipLevelName: app.getVipLevelName ? app.getVipLevelName() : '免费版',
+      userTitle: userTitle,
+      titleClass: titleClass,
+      vipBadgeClass: vipBadgeClass,
       avatar: profile.avatar || '👤',
       greeting: greet,
       greetingName: name

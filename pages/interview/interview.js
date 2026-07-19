@@ -421,9 +421,12 @@ Page({
     var answers = progress.answers || [];
     for (var i = 0; i < answers.length; i++) {
       totalScore += answers[i].score || 0;
-      // 精简question对象，只保留文本
+      // 精简question对象，只保留文本；同时保存questionId用于收藏匹配
       if (answers[i].question && typeof answers[i].question !== 'string') {
+        answers[i].questionId = answers[i].question.id || answers[i].question.num || (i + 1);
         answers[i].question = answers[i].question.question || '';
+      } else {
+        answers[i].questionId = i + 1;
       }
     }
     var avgScore = answers.length > 0 ? Math.round(totalScore / answers.length) : 0;

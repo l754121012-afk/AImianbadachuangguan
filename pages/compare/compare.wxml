@@ -1,0 +1,299 @@
+<view class="page">
+  <view class="tab-bar">
+    <view class="tab-item {{selectedTab === index ? 'active' : ''}}"
+          wx:for="{{tabs}}" wx:key="*this"
+          data-index="{{index}}" bindtap="onTabTap">
+      {{item}}
+    </view>
+  </view>
+
+  <!-- ===== Tab 0: 权益对比总览 ===== -->
+  <view class="tab-content" wx:if="{{selectedTab === 0}}">
+    <view class="principles">
+      <view class="pr-item">
+        <text class="pr-icon">🎯</text>
+        <text class="pr-text">场景全开放：求职/考研/考公全部免费</text>
+      </view>
+      <view class="pr-item">
+        <text class="pr-icon">🧠</text>
+        <text class="pr-text">AI增值分层：Pro聚焦高级分析服务</text>
+      </view>
+      <view class="pr-item">
+        <text class="pr-icon">📈</text>
+        <text class="pr-text">体验驱动付费：免费可看完整基础功能</text>
+      </view>
+    </view>
+
+    <view class="diff-section-title">核心功能差异对比</view>
+    <view class="diff-table">
+      <view class="diff-header-row">
+        <view class="diff-header-label">功能</view>
+        <view class="diff-header-tier" wx:for="{{tierNames}}" wx:key="*this">
+          <text class="diff-tier-badge {{tierColors[index]}}">{{item}}</text>
+        </view>
+      </view>
+      <view class="diff-row" wx:for="{{diffFeatures}}" wx:key="label">
+        <view class="diff-label">{{item.label}}</view>
+        <view class="diff-cell {{cell.highlight ? 'hl' : ''}}" wx:for="{{item.values}}" wx:for-item="cell" wx:for-index="vi" wx:key="vi">
+          <text class="diff-val">{{cell}}</text>
+          <text class="diff-up-arrow" wx:if="{{cell.highlight && vi > 0}}">🆕</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="diff-legend">
+      <text class="legend-item"><text class="legend-dot new"></text> 较上一档新增</text>
+      <text class="legend-item"><text class="legend-dot pro"></text> Pro年卡专属</text>
+    </view>
+  </view>
+
+  <!-- ===== Tab 1: 首页效果 ===== -->
+  <view class="tab-content" wx:if="{{selectedTab === 1}}">
+    <view class="scene-title">
+      <text class="scene-icon">🏠</text>
+      <text class="scene-name">首页 — 不同套餐的首页展示差异</text>
+    </view>
+    <view class="cmp-grid">
+      <!-- 免费版 -->
+      <view class="cmp-card tier-gray">
+        <view class="cmp-header"><text class="cmp-tier free">免费版</text></view>
+        <view class="cmp-body">
+          <view class="mu-avatar-row"><view class="mu-avatar">👤</view><view><text class="mu-greet">下午好</text><text class="mu-name">面试达人</text></view></view>
+          <view class="mu-stats"><view class="mu-stat"><text class="mu-val">3</text><text class="mu-lbl">剩余次数</text></view><view class="mu-stat"><text class="mu-val">87</text><text class="mu-lbl">最高分</text></view></view>
+          <view class="mu-vip-bar free-vip">💎 免费版</view>
+          <view class="mu-scene"><text>💼 求职面试</text><text>→</text></view>
+          <view class="mu-scene"><text>📚 考研复试</text><text>→</text></view>
+          <view class="mu-scene"><text>🏛️ 考公面试</text><text>→</text></view>
+        </view>
+      </view>
+      <!-- 单次体验包 -->
+      <view class="cmp-card tier-gray">
+        <view class="cmp-header"><text class="cmp-tier single">单次体验包</text></view>
+        <view class="cmp-body">
+          <view class="mu-avatar-row"><view class="mu-avatar">👤</view><view><text class="mu-greet">下午好</text><text class="mu-name">面试达人</text></view></view>
+          <view class="highlight-box">
+            <text class="highlight-label">升级</text>
+            <view class="mu-stats"><view class="mu-stat"><text class="mu-val">5</text><text class="mu-lbl">剩余次数</text></view><view class="mu-stat"><text class="mu-val">87</text><text class="mu-lbl">最高分</text></view></view>
+            <view class="mu-vip-bar single-vip">💎 单次体验包</view>
+          </view>
+          <view class="mu-scene"><text>💼 求职面试</text><text>→</text></view>
+          <view class="mu-scene"><text>📚 考研复试</text><text>→</text></view>
+          <view class="mu-scene"><text>🏛️ 考公面试</text><text>→</text></view>
+        </view>
+      </view>
+      <!-- 求职季冲刺包 -->
+      <view class="cmp-card tier-gold">
+        <view class="cmp-header"><text class="cmp-tier season">求职季冲刺包</text></view>
+        <view class="cmp-body">
+          <view class="mu-avatar-row"><view class="mu-avatar">👤</view><view><text class="mu-greet">下午好</text><text class="mu-name">面试达人</text></view></view>
+          <view class="highlight-box">
+            <text class="highlight-label">升级</text>
+            <view class="mu-stats"><view class="mu-stat"><text class="mu-val inf">∞</text><text class="mu-lbl">无限次数</text></view><view class="mu-stat"><text class="mu-val">87</text><text class="mu-lbl">最高分</text></view></view>
+            <view class="mu-vip-bar season-vip">👑 求职季冲刺包</view>
+            <view class="mu-ad-free"><text>🚫</text> 已去除全部广告</view>
+          </view>
+          <view class="mu-scene"><text>💼 求职面试</text><text>→</text></view>
+          <view class="mu-scene"><text>📚 考研复试</text><text>→</text></view>
+          <view class="mu-scene"><text>🏛️ 考公面试</text><text>→</text></view>
+        </view>
+      </view>
+      <!-- Pro年卡 -->
+      <view class="cmp-card tier-pro">
+        <view class="cmp-header"><text class="cmp-tier pro">Pro年卡</text></view>
+        <view class="cmp-body">
+          <view class="mu-avatar-row"><view class="mu-avatar">👤</view><view><text class="mu-greet">下午好</text><text class="mu-name">面试达人</text></view></view>
+          <view class="mu-stats"><view class="mu-stat"><text class="mu-val inf">∞</text><text class="mu-lbl">无限次数</text></view><view class="mu-stat"><text class="mu-val">87</text><text class="mu-lbl">最高分</text></view></view>
+          <view class="mu-vip-bar pro-vip">👑 Pro年卡</view>
+          <view class="mu-scene"><text>💼 求职面试</text><text>→</text></view>
+          <view class="mu-scene"><text>📚 考研复试</text><text>→</text></view>
+          <view class="mu-scene"><text>🏛️ 考公面试</text><text>→</text></view>
+          <view class="highlight-box">
+            <text class="highlight-label">Pro独享</text>
+            <view class="mu-pro-link">🧠 AI教练 · 深度分析</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== Tab 2: 报告效果 ===== -->
+  <view class="tab-content" wx:if="{{selectedTab === 2}}">
+    <view class="scene-title">
+      <text class="scene-icon">📋</text>
+      <text class="scene-name">报告页 — 核心差异化最明显的页面</text>
+    </view>
+    <view class="cmp-grid">
+      <!-- 免费版 -->
+      <view class="cmp-card tier-gray">
+        <view class="cmp-header"><text class="cmp-tier free">免费版</text></view>
+        <view class="cmp-body">
+          <view class="rp-grade"><view class="rp-circle"><text class="rp-letter">B</text></view><view><text class="rp-score">82分</text></view></view>
+          <view class="highlight-box">
+            <text class="highlight-label">预览</text>
+            <view class="rp-sec-title">五维能力 <text class="rp-lock-tag">🔒 预览</text></view>
+            <view class="rp-dim-blur"><view class="rp-dim"><view class="rp-dim-bar" style="width:78%"></view></view><view class="rp-dim"><view class="rp-dim-bar" style="width:85%"></view></view><view class="rp-blur-cover">🔒</view></view>
+            <view class="rp-q"><text class="rp-q-num">Q1</text>自我介绍... <text class="rp-q-score">85</text></view>
+            <view class="rp-q"><text class="rp-q-num">Q2</text>优点是什么？ <text class="rp-q-score">78</text></view>
+            <view class="rp-q-locked">🔒 剩余3题已锁定</view>
+          </view>
+          <view class="rp-missing">AI深度分析 <text class="no-tag">✗</text></view>
+          <view class="rp-missing">提升建议 <text class="no-tag">✗</text></view>
+          <view class="rp-missing">历史趋势 <text class="no-tag">✗</text></view>
+        </view>
+      </view>
+      <!-- 单次体验包 -->
+      <view class="cmp-card tier-gray">
+        <view class="cmp-header"><text class="cmp-tier single">单次体验包</text></view>
+        <view class="cmp-body">
+          <view class="rp-grade"><view class="rp-circle"><text class="rp-letter">B</text></view><view><text class="rp-score">82分</text></view></view>
+          <view class="highlight-box">
+            <text class="highlight-label">升级</text>
+            <view class="rp-sec-title">五维能力 <text class="rp-unlock-tag">✓ 已解锁</text></view>
+            <view class="rp-dim"><view class="rp-dim-bar" style="width:78%"></view></view>
+            <view class="rp-dim"><view class="rp-dim-bar" style="width:85%"></view></view>
+            <view class="rp-dim"><view class="rp-dim-bar" style="width:72%"></view></view>
+            <view class="rp-dim"><view class="rp-dim-bar" style="width:68%"></view></view>
+            <view class="rp-dim"><view class="rp-dim-bar" style="width:80%"></view></view>
+            <view class="rp-q"><text class="rp-q-num">Q1</text>自我介绍... <text class="rp-q-score">85</text></view>
+            <view class="rp-q"><text class="rp-q-num">Q2</text>优点是什么？ <text class="rp-q-score">78</text></view>
+            <view class="rp-q"><text class="rp-q-num">Q3</text>为什么选我们？ <text class="rp-q-score">72</text></view>
+            <view class="rp-q-all">✓ 全部5题已解锁</view>
+          </view>
+          <view class="rp-missing">AI深度分析 <text class="no-tag">✗</text></view>
+          <view class="rp-missing">提升建议 <text class="no-tag">✗</text></view>
+        </view>
+      </view>
+      <!-- 求职季冲刺包 -->
+      <view class="cmp-card tier-gold">
+        <view class="cmp-header"><text class="cmp-tier season">求职季冲刺包</text></view>
+        <view class="cmp-body">
+          <view class="rp-grade"><view class="rp-circle"><text class="rp-letter">B</text></view><view><text class="rp-score">82分</text><text class="rp-sub">AI综合点评</text></view></view>
+          <view class="rp-sec-title">五维能力 <text class="rp-unlock-tag">✓ 已解锁</text></view>
+          <view class="rp-dim"><view class="rp-dim-bar" style="width:78%"></view></view>
+          <view class="rp-dim"><view class="rp-dim-bar" style="width:85%"></view></view>
+          <view class="rp-dim"><view class="rp-dim-bar" style="width:72%"></view></view>
+          <view class="rp-dim"><view class="rp-dim-bar" style="width:68%"></view></view>
+          <view class="rp-dim"><view class="rp-dim-bar" style="width:80%"></view></view>
+          <view class="highlight-box">
+            <text class="highlight-label">升级</text>
+            <view class="rp-ai-comment">📝 AI综合点评：整体表现良好，逻辑清晰</view>
+          </view>
+          <view class="rp-q"><text class="rp-q-num">Q1~5</text>全部题目反馈 <text class="rp-q-score">已解锁</text></view>
+          <view class="rp-missing">AI深度分析 <text class="no-tag">✗</text></view>
+          <view class="rp-missing">历史趋势 <text class="no-tag">✗</text></view>
+        </view>
+      </view>
+      <!-- Pro年卡 -->
+      <view class="cmp-card tier-pro">
+        <view class="cmp-header"><text class="cmp-tier pro">Pro年卡</text></view>
+        <view class="cmp-body">
+          <view class="rp-grade"><view class="rp-circle"><text class="rp-letter">B</text></view><view><text class="rp-score">82分</text><text class="rp-sub">Pro高级分析</text></view></view>
+          <view class="rp-sec-title">五维能力 <text class="rp-pro-tag">Pro</text></view>
+          <view class="rp-dim"><view class="rp-dim-bar" style="width:78%"></view></view>
+          <view class="rp-dim"><view class="rp-dim-bar" style="width:85%"></view></view>
+          <view class="rp-dim"><view class="rp-dim-bar" style="width:72%"></view></view>
+          <view class="rp-dim"><view class="rp-dim-bar" style="width:68%"></view></view>
+          <view class="rp-dim"><view class="rp-dim-bar" style="width:80%"></view></view>
+          <view class="highlight-box">
+            <text class="highlight-label">Pro独享</text>
+            <view class="rp-pro-feature">🧠 AI深度分析</view>
+            <view class="rp-pro-feature">📋 个性化提升建议</view>
+            <view class="rp-pro-feature">📈 历史趋势对比</view>
+            <view class="rp-pro-feature">🎤 语音语调分析</view>
+            <view class="rp-pro-feature">📤 报告导出</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== Tab 3: 记录效果 ===== -->
+  <view class="tab-content" wx:if="{{selectedTab === 3}}">
+    <view class="scene-title">
+      <text class="scene-icon">📊</text>
+      <text class="scene-name">记录页 — 成长数据可视化差异</text>
+    </view>
+    <view class="cmp-grid">
+      <!-- 免费版 -->
+      <view class="cmp-card tier-gray">
+        <view class="cmp-header"><text class="cmp-tier free">免费版</text></view>
+        <view class="cmp-body">
+          <view class="rc-avatar-row"><view class="rc-avatar">👤</view><view><text class="rc-name">面试达人</text><text class="rc-title">面试小白</text></view></view>
+          <view class="rc-upgrade">🔓 升级解锁全部功能</view>
+          <view class="highlight-box">
+            <text class="highlight-label">预览</text>
+            <view class="rc-sec-title">能力评估</view>
+            <view class="rc-ab"><text class="rc-ab-label">表达</text><view class="rc-ab-bar"><view style="width:82%"></view></view><text class="rc-ab-val">82</text></view>
+            <view class="rc-ab"><text class="rc-ab-label">逻辑</text><view class="rc-ab-bar"><view style="width:75%"></view></view><text class="rc-ab-val">75</text></view>
+            <view class="rc-ab"><text class="rc-ab-label">专业</text><view class="rc-ab-bar"><view style="width:68%"></view></view><text class="rc-ab-val">68</text></view>
+            <view class="rc-dim-hint">仅展示3项</view>
+          </view>
+          <view class="rc-hist"><text>产品经理面试</text><text class="rc-hist-score">87</text></view>
+          <view class="rc-hist"><text>计算机复试</text><text class="rc-hist-score">76</text></view>
+        </view>
+      </view>
+      <!-- 单次体验包 -->
+      <view class="cmp-card tier-gray">
+        <view class="cmp-header"><text class="cmp-tier single">单次体验包</text></view>
+        <view class="cmp-body">
+          <view class="rc-avatar-row"><view class="rc-avatar">👤</view><view><text class="rc-name">面试达人</text><text class="rc-title">面试新手</text></view></view>
+          <view class="rc-upgrade active">✓ 单次体验包</view>
+          <view class="highlight-box">
+            <text class="highlight-label">升级</text>
+            <view class="rc-sec-title">能力评估</view>
+            <view class="rc-ab"><text class="rc-ab-label">表达</text><view class="rc-ab-bar"><view style="width:82%"></view></view><text class="rc-ab-val">82</text></view>
+            <view class="rc-ab"><text class="rc-ab-label">逻辑</text><view class="rc-ab-bar"><view style="width:75%"></view></view><text class="rc-ab-val">75</text></view>
+            <view class="rc-ab"><text class="rc-ab-label">专业</text><view class="rc-ab-bar"><view style="width:68%"></view></view><text class="rc-ab-val">68</text></view>
+            <view class="rc-ab"><text class="rc-ab-label">应变</text><view class="rc-ab-bar"><view style="width:80%"></view></view><text class="rc-ab-val">80</text></view>
+            <view class="rc-ab"><text class="rc-ab-label">礼仪</text><view class="rc-ab-bar"><view style="width:90%"></view></view><text class="rc-ab-val">90</text></view>
+            <view class="rc-dim-hint">完整5项能力</view>
+          </view>
+          <view class="rc-hist"><text>产品经理面试</text><text class="rc-hist-score">87</text></view>
+          <view class="rc-hist"><text>计算机复试</text><text class="rc-hist-score">76</text></view>
+        </view>
+      </view>
+      <!-- 求职季冲刺包 -->
+      <view class="cmp-card tier-gold">
+        <view class="cmp-header"><text class="cmp-tier season">求职季冲刺包</text></view>
+        <view class="cmp-body">
+          <view class="rc-avatar-row"><view class="rc-avatar">👤</view><view><text class="rc-name">面试达人</text><text class="rc-title">面试新手</text></view></view>
+          <view class="rc-upgrade active">👑 求职季冲刺包</view>
+          <view class="rc-sec-title">能力评估</view>
+          <view class="rc-ab"><text class="rc-ab-label">表达</text><view class="rc-ab-bar"><view style="width:82%"></view></view><text class="rc-ab-val">82</text></view>
+          <view class="rc-ab"><text class="rc-ab-label">逻辑</text><view class="rc-ab-bar"><view style="width:75%"></view></view><text class="rc-ab-val">75</text></view>
+          <view class="rc-ab"><text class="rc-ab-label">专业</text><view class="rc-ab-bar"><view style="width:68%"></view></view><text class="rc-ab-val">68</text></view>
+          <view class="rc-ab"><text class="rc-ab-label">应变</text><view class="rc-ab-bar"><view style="width:80%"></view></view><text class="rc-ab-val">80</text></view>
+          <view class="rc-ab"><text class="rc-ab-label">礼仪</text><view class="rc-ab-bar"><view style="width:90%"></view></view><text class="rc-ab-val">90</text></view>
+          <view class="highlight-box">
+            <text class="highlight-label">升级</text>
+            <view class="rc-feature">📜 历史记录回放</view>
+            <view class="rc-feature">🏆 专属面试称号</view>
+          </view>
+          <view class="rc-missing-sm">趋势曲线 <text class="no-tag">✗</text></view>
+          <view class="rc-missing-sm">弱项诊断 <text class="no-tag">✗</text></view>
+        </view>
+      </view>
+      <!-- Pro年卡 -->
+      <view class="cmp-card tier-pro">
+        <view class="cmp-header"><text class="cmp-tier pro">Pro年卡</text></view>
+        <view class="cmp-body">
+          <view class="rc-avatar-row"><view class="rc-avatar">👤</view><view><text class="rc-name">面试达人</text><text class="rc-title">面试新手 · 表达之星</text></view></view>
+          <view class="rc-upgrade active pro-up">👑 Pro年卡</view>
+          <view class="rc-sec-title">能力评估 <text class="rc-pro-tag">Pro</text></view>
+          <view class="rc-ab"><text class="rc-ab-label">表达</text><view class="rc-ab-bar"><view style="width:82%"></view></view><text class="rc-ab-val">82</text></view>
+          <view class="rc-ab"><text class="rc-ab-label">逻辑</text><view class="rc-ab-bar"><view style="width:75%"></view></view><text class="rc-ab-val">75</text></view>
+          <view class="rc-ab"><text class="rc-ab-label">专业</text><view class="rc-ab-bar"><view style="width:68%"></view></view><text class="rc-ab-val">68</text></view>
+          <view class="rc-ab"><text class="rc-ab-label">应变</text><view class="rc-ab-bar"><view style="width:80%"></view></view><text class="rc-ab-val">80</text></view>
+          <view class="rc-ab"><text class="rc-ab-label">礼仪</text><view class="rc-ab-bar"><view style="width:90%"></view></view><text class="rc-ab-val">90</text></view>
+          <view class="highlight-box">
+            <text class="highlight-label">Pro独享</text>
+            <view class="rc-feature pro-f">📈 能力趋势曲线</view>
+            <view class="rc-feature pro-f">🎯 弱项智能诊断</view>
+            <view class="rc-feature pro-f">📤 报告导出</view>
+            <view class="rc-feature pro-f">📊 进步热力图</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
