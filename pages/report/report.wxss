@@ -1,4 +1,4 @@
-.page-report {
+ge-report {
   padding: 0 32rpx 40rpx;
   min-height: 100vh;
   background: #0a0e1a;
@@ -219,11 +219,11 @@
   border-radius: 8rpx;
   font-weight: 600;
 }
-.badge-优秀 { background: rgba(16,185,129,0.15); color: #10b981; }
-.badge-良好 { background: rgba(59,130,246,0.15); color: #3b82f6; }
-.badge-合格 { background: rgba(245,158,11,0.15); color: #f59e0b; }
-.badge-待提升 { background: rgba(239,68,68,0.15); color: #ef4444; }
-.badge-需努力 { background: rgba(107,114,128,0.15); color: #6b7280; }
+.badge-excellent { background: rgba(16,185,129,0.15); color: #10b981; }
+.badge-good { background: rgba(59,130,246,0.15); color: #3b82f6; }
+.badge-ok { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.badge-improve { background: rgba(239,68,68,0.15); color: #ef4444; }
+.badge-weak { background: rgba(107,114,128,0.15); color: #6b7280; }
 
 /* 锁定卡片 */
 .locked-card {

@@ -57,7 +57,7 @@
           <view class="q-fav {{item.favorited ? 'faved' : ''}}" catchtap="onToggleFav" data-id="{{item.id}}">
             {{item.favorited ? '★' : '☆'}} 收藏
           </view>
-          <view class="q-badge badge-{{item.badge}}">{{item.badge}}</view>
+          <view class="q-badge badge-{{item.badgeKey}}">{{item.badge}}</view>
         </view>
       </view>
       <view class="q-title">{{item.text}}</view>
