@@ -53,7 +53,7 @@ Page({
     ]
   },
 
-  onLoad() {
+  onLoad: function() {
     this.refreshData();
   },
 
@@ -76,6 +76,8 @@ Page({
     this.setData({
       freeCount: app.globalData.freeCount,
       isVip: app.globalData.isVip,
+      vipLevelName: app.getVipLevelName ? app.getVipLevelName() : '免费版',
+      avatar: profile.avatar || '👤',
       greeting: greet,
       greetingName: name
     });
@@ -145,6 +147,11 @@ Page({
     this.setData({ recentList: recentList, completedToday: completedToday });
   },
 
+  // 支付成功后刷新
+  onVipChanged: function() {
+    this.refreshData();
+  },
+
   // 点击最近练习项
   onTapRecent: function(e) {
     var item = e.currentTarget.dataset.item;
@@ -172,21 +179,6 @@ Page({
 
   onSelectScene: function(e) {
     var scene = e.currentTarget.dataset.scene;
-    var level = app.getVipLevel ? app.getVipLevel() : 0;
-    if (scene !== 'job' && level < 3) {
-      wx.showModal({
-        title: 'Pro年卡专属',
-        content: '考公/考研题库为Pro年卡会员专属权益',
-        confirmText: '升级Pro',
-        cancelText: '取消',
-        success: function(res) {
-          if (res.confirm) {
-            wx.navigateTo({ url: '/pages/record/record' });
-          }
-        }
-      });
-      return;
-    }
     this.setData({
       currentModalScene: scene,
       showSceneModal: true

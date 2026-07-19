@@ -8,7 +8,8 @@
     "pages/replay/replay",
     "pages/favorites/favorites",
     "pages/settings/settings",
-    "pages/avatar/avatar"
+    "pages/avatar/avatar",
+    "pages/benefits/benefits"
   ],
   "window": {
     "backgroundTextStyle": "light",

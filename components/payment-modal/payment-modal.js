@@ -6,14 +6,14 @@ Component({
   data: { 
     selectedIndex: 1, 
     prices: [ 
-      { id: "single", name: "单次体验包", price: "4.99", desc: "尝鲜体验，感受AI面试", 
-        benefits: ["5次完整AI面试", "基础评分报告", "7天有效期内使用"], 
+      { id: "single", name: "单次体验包", price: "9.99", desc: "尝鲜体验，感受AI面试", 
+        benefits: ["5次完整AI面试", "完整五维评分报告", "7天有效期内使用"], 
         days: 7, interviews: 5, level: 1 }, 
       { id: "season", name: "求职季冲刺包", price: "29.9", desc: "面试季定心丸，无限刷题", popular: true, 
-        benefits: ["无限次AI面试", "完整五维评分报告", "历史记录回放", "去除所有广告", "专属面试称号"], 
+        benefits: ["无限次AI面试", "完整五维评分+AI点评", "历史记录回放", "去除所有广告", "专属面试称号"], 
         days: 90, interviews: -1, level: 2 }, 
-      { id: "year", name: "Pro 年卡", price: "59.9", desc: "全年无忧，求职考证全搞定", 
-        benefits: ["求职季全部权益", "考公/考研专属题库", "面试技巧干货课程", "AI深度分析报告", "优先使用新功能", "专属客服通道"], 
+      { id: "year", name: "Pro 年卡", price: "59.9", desc: "全年无忧，AI教练陪你上岸", 
+        benefits: ["冲刺包全部权益", "AI深度分析+提升建议", "历史趋势对比+进步曲线", "语音语调分析", "面试报告导出", "优先使用新功能"], 
         days: 365, interviews: -1, level: 3 } 
     ], 
     currentBenefits: [] 
@@ -38,7 +38,11 @@ Component({
       this.triggerEvent("close"); 
     }, 
 
-    stopPropagation: function() {}, 
+    stopPropagation: function() {},
+
+    onPreviewBenefits: function() {
+      wx.navigateTo({ url: '/pages/benefits/benefits' });
+    }, 
 
     onPay: function() { 
       var that = this; 

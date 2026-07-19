@@ -28,6 +28,10 @@
       </view>
     </view>
 
+    <view class="preview-link" bindtap="onPreviewBenefits">
+      📊 查看完整权益对比图 ›
+    </view>
+
     <view class="wxpay-btn" bindtap="onPay">
       ● 微信支付 ¥{{prices[selectedIndex].price}}
     </view>

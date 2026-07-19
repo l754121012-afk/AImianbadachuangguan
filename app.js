@@ -23,6 +23,14 @@ App({
     if (isVip !== '') this.globalData.isVip = isVip;
     var history = wx.getStorageSync('interviewHistory');
     if (history) this.globalData.interviewHistory = history;
+    var vipLevel = wx.getStorageSync('vipLevel');
+    if (vipLevel !== '') this.globalData.vipLevel = vipLevel;
+    var vipExpireTime = wx.getStorageSync('vipExpireTime');
+    if (vipExpireTime !== '') this.globalData.vipExpireTime = vipExpireTime;
+    var vipInterviews = wx.getStorageSync('vipInterviews');
+    if (vipInterviews !== '') this.globalData.vipInterviews = vipInterviews;
+    var vipUsedInterviews = wx.getStorageSync('vipUsedInterviews');
+    if (vipUsedInterviews !== '') this.globalData.vipUsedInterviews = vipUsedInterviews;
   },
 
   getUserProfile: function() {

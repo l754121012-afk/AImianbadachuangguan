@@ -141,6 +141,14 @@
   text-align: center;
   border-radius: 28rpx;
 }
+.preview-link {
+  text-align: center;
+  font-size: 26rpx;
+  color: #60a5fa;
+  padding: 16rpx 0;
+  margin-bottom: 8rpx;
+}
+
 .wxpay-note {
   text-align: center;
   font-size: 24rpx;
