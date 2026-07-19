@@ -1,8 +1,8 @@
 <view class="payment-overlay" wx:if="{{show}}" bindtap="onClose">
   <view class="payment-modal" catchtap="stopPropagation">
     <view class="payment-handle"></view>
-    <view class="payment-title">🌟 升级求职季套餐</view>
-    <view class="payment-sub">一杯奶茶钱，面试无限练</view>
+    <view class="payment-title">🌟 升级面试套餐</view>
+    <view class="payment-sub">选择适合你的求职加速方案</view>
 
     <view class="price-card {{selectedIndex === index ? 'selected' : ''}}"
           wx:for="{{prices}}" wx:key="id"
@@ -13,17 +13,18 @@
         <view class="p-desc">{{item.desc}}</view>
       </view>
       <view class="p-price {{selectedIndex === index ? 'active' : ''}}">
-        <text class="small">¥</text>{{item.price}}
+        <text class="p-small">¥</text>{{item.price}}
       </view>
       <view class="p-check">
         <text wx:if="{{selectedIndex === index}}">✓</text>
       </view>
     </view>
 
-    <view class="feature-list">
-      <view class="feature-item" wx:for="{{features}}" wx:key="*this">
-        <text class="check">✓</text>
-        <text>{{item}}</text>
+    <view class="benefit-list">
+      <view class="benefit-title">套餐权益</view>
+      <view class="benefit-item" wx:for="{{currentBenefits}}" wx:key="*this">
+        <text class="benefit-check">✓</text>
+        <text class="benefit-text">{{item}}</text>
       </view>
     </view>
 

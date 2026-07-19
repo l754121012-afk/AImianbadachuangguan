@@ -127,7 +127,7 @@ Page({
       startTime: Date.now()
     };
     app.setInterviewProgress(progress);
-    app.useFreeCount();
+    app.useInterviewCount();
     wx.navigateTo({ url: '/pages/interview/interview' });
   },
 

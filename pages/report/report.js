@@ -11,6 +11,7 @@ Page({
     questions: [],
     showPayment: false,
     isVip: false,
+    vipLevel: 0,
     fromUpgrade: false,
     unlockedTitle: ''
   },

@@ -38,14 +38,14 @@
   </view>
 
   <!-- 锁定提示 -->
-  <view class="q-card locked" wx:if="{{!isVip}}">
+  <view class="q-card locked" wx:if="{{!isVip || vipLevel < 2}}">
     <view class="q-num">Q3 · 行为面试</view>
     <view class="q-title">🔒 完整报告需解锁</view>
     <view class="q-feedback">查看Q3-Q5的详细分析，请解锁完整报告</view>
   </view>
 
   <!-- 操作按钮 -->
-  <view class="btn-primary" wx:if="{{!isVip}}" bindtap="onUnlock">🔒 解锁完整报告</view>
+  <view class="btn-primary" wx:if="{{!isVip || vipLevel < 2}}" bindtap="onUnlock">🔒 解锁完整报告</view>
   <view class="btn-outline" bindtap="onShare">📷 分享到朋友圈</view>
   <view class="btn-outline" bindtap="onRetry" style="margin-top: 16rpx;">🔄 再练一次</view>
 </view>

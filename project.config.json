@@ -2,14 +2,26 @@
   "compileType": "miniprogram",
   "appid": "wx8b8ad2eb42135153",
   "projectname": "Ai%E9%9D%A2%E9%9C%B8%E5%A4%A7%E9%97%AF%E5%85%B3",
-  "libVersion": "2.33.3",
+  "libVersion": "3.16.1",
   "packOptions": {
     "include": [],
     "ignore": [
-      { "type": "folder", "value": "_shared" },
-      { "type": "folder", "value": "assets" },
-      { "type": "suffix", "value": ".html" },
-      { "type": "folder", "value": "voice-server" }
+      {
+        "value": "_shared",
+        "type": "folder"
+      },
+      {
+        "value": "assets",
+        "type": "folder"
+      },
+      {
+        "value": ".html",
+        "type": "suffix"
+      },
+      {
+        "value": "voice-server",
+        "type": "folder"
+      }
     ]
   },
   "setting": {
@@ -24,7 +36,19 @@
       "disablePlugins": [],
       "outputPath": ""
     },
-    "packNpmRelationList": []
+    "packNpmRelationList": [],
+    "compileWorklet": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true
   },
-  "condition": {}
+  "condition": {},
+  "simulatorPluginLibVersion": {},
+  "editorSetting": {}
 }

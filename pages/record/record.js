@@ -3,6 +3,7 @@ var app = getApp();
 Page({
   data: {
     isVip: false,
+    vipLevelName: '免费版',
     nickname: '面试达人',
     title: '面试小白',
     avatar: '👤',
@@ -33,6 +34,7 @@ Page({
 
     this.setData({
       isVip: app.globalData.isVip,
+      vipLevelName: app.getVipLevelName ? app.getVipLevelName() : '免费版',
       nickname: profile.nickname,
       title: profile.title,
       avatar: profile.avatar

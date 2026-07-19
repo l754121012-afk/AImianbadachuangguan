@@ -10,7 +10,7 @@
       <view class="profile-name">{{nickname}}</view>
       <view class="profile-title">🏆 {{title}}</view>
       <view class="profile-meta">已练习 {{totalCount}} 次 · 平均 {{avgScore}} 分</view>
-      <view class="vip-badge {{isVip ? 'vip-active' : ''}}">{{isVip ? 'Pro年卡' : '免费版'}}</view>
+      <view class="vip-badge {{isVip ? 'vip-active' : ''}}">{{vipLevelName}}</view>
     </view>
     <view class="profile-arrow">▶</view>
   </view>
