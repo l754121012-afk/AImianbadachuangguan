@@ -137,21 +137,55 @@ App({
     wx.setStorageSync('interviewHistory', history);
   },
 
-  useFreeCount: function() {
+  useInterviewCount: function() {
+    var level = this.getVipLevel();
+    if (level >= 2) return;
+    if (level === 1) {
+      this.globalData.vipUsedInterviews = (this.globalData.vipUsedInterviews || 0) + 1;
+      wx.setStorageSync('vipUsedInterviews', this.globalData.vipUsedInterviews);
+      return;
+    }
     if (this.globalData.freeCount > 0) {
       this.globalData.freeCount--;
       wx.setStorageSync('freeCount', this.globalData.freeCount);
-      return true;
     }
-    return false;
   },
 
   addFreeCount: function(count) {
-    this.globalData.freeCount += count;
+    this.globalData.freeCount = (this.globalData.freeCount || 0) + count;
     wx.setStorageSync('freeCount', this.globalData.freeCount);
   },
 
+  getVipLevelName: function() {
+    var level = this.globalData.vipLevel || 0;
+    if (level >= 3) return 'Pro年卡';
+    if (level >= 2) return '求职季冲刺包';
+    if (level >= 1) return '单次体验包';
+    return '免费版';
+  },
+
+  getVipLevel: function() {
+    var level = this.globalData.vipLevel || 0;
+    if (level > 0 && this.globalData.vipExpireTime) {
+      if (Date.now() > this.globalData.vipExpireTime) {
+        this.globalData.isVip = false;
+        this.globalData.vipLevel = 0;
+        wx.setStorageSync('isVip', false);
+        wx.setStorageSync('vipLevel', 0);
+        return 0;
+      }
+    }
+    return level;
+  },
+
   canStartInterview: function() {
-    return this.globalData.freeCount > 0 || this.globalData.isVip;
-  }
-});
+    if (this.globalData.freeCount > 0) return true;
+    var level = this.getVipLevel();
+    if (level >= 2) return true;
+    if (level === 1) {
+      var used = this.globalData.vipUsedInterviews || 0;
+      var total = this.globalData.vipInterviews || 5;
+      return used < total;
+    }
+    return false;
+  }});

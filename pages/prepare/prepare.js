@@ -83,6 +83,7 @@ Page({
   },
 
   onStartInterview: function() {
+    var that = this;
     var jobs = this.data.jobs; var jobIndex = this.data.jobIndex; var difficulties = this.data.difficulties; var difficultyIndex = this.data.difficultyIndex; var modes = this.data.modes;
     app.globalData.currentJob = jobs[jobIndex];
     app.globalData.currentDifficulty = difficulties[difficultyIndex];

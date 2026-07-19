@@ -7,8 +7,8 @@ Component({
     selectedIndex: 1, 
     prices: [ 
       { id: "single", name: "单次体验包", price: "4.99", desc: "尝鲜体验，感受AI面试", 
-        benefits: ["1次完整AI面试", "基础评分报告", "1天有效期内使用"], 
-        days: 1, interviews: 1, level: 1 }, 
+        benefits: ["5次完整AI面试", "基础评分报告", "7天有效期内使用"], 
+        days: 7, interviews: 5, level: 1 }, 
       { id: "season", name: "求职季冲刺包", price: "29.9", desc: "面试季定心丸，无限刷题", popular: true, 
         benefits: ["无限次AI面试", "完整五维评分报告", "历史记录回放", "去除所有广告", "专属面试称号"], 
         days: 90, interviews: -1, level: 2 }, 

@@ -121,6 +121,7 @@ Page({
       dimensions: dimensions,
       questions: questions,
       isVip: app.globalData.isVip,
+      vipLevel: app.globalData.vipLevel || 0,
       fromUpgrade: fromUpgrade
     });
     this.checkUnlockTitles(score);
@@ -158,15 +159,26 @@ Page({
   },
 
   onUnlock: function() {
-    if (this.data.isVip) {
-      wx.showToast({ title: '已是会员', icon: 'none' });
+    var level = app.getVipLevel ? app.getVipLevel() : 0;
+    if (level >= 2) {
+      wx.showToast({ title: '报告已解锁', icon: 'success' });
+      this.setData({ isVip: true, vipLevel: level });
       return;
     }
     this.setData({ showPayment: true });
   },
 
+  onVipChanged: function() {
+    var level = app.getVipLevel ? app.getVipLevel() : 0;
+    this.setData({ isVip: app.globalData.isVip, vipLevel: level, showPayment: false });
+    if (level >= 2) {
+      wx.showToast({ title: '报告已解锁', icon: 'success' });
+    }
+  },
+
   onClosePayment: function() {
-    this.setData({ showPayment: false });
+    var level = app.getVipLevel ? app.getVipLevel() : 0;
+    this.setData({ showPayment: false, isVip: app.globalData.isVip, vipLevel: level });
   },
 
   onShare: function() {

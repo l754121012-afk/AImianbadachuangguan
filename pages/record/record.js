@@ -4,6 +4,7 @@ Page({
   data: {
     isVip: false,
     vipLevelName: '免费版',
+    showPayment: false,
     nickname: '面试达人',
     title: '面试小白',
     avatar: '👤',
