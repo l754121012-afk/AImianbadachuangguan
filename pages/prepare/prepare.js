@@ -5,7 +5,7 @@ Page({
   data: {
     sceneTitle: '面试准备',
     categoryName: '',
-    jobs: ['产品经理', 'Java开发', '前端开发', '运营专员', '市场营销', '财务会计'],
+    jobs: ['Java开发', '前端开发', 'Python开发', '算法工程师', '测试工程师', '运维工程师'],
     jobIndex: 0,
     difficulties: ['基础', '进阶', '挑战'],
     difficultyIndex: 0,
@@ -20,7 +20,6 @@ Page({
   },
 
   onLoad(options) {
-    // 接收场景参数
     var scene = options.scene || app.globalData.currentScene || 'job';
     var category = options.category || app.globalData.currentCategory || '';
     var continueFlag = options.continue;
@@ -29,24 +28,23 @@ Page({
     var jobs = [];
     var sceneTitle = '面试准备';
 
-    // 根据场景和分类动态设置岗位
     if (scene === 'job') {
       sceneTitle = '求职面试';
-      if (category === '互联网') jobs = ['产品经理', 'Java开发', '前端开发', 'UI设计师', '数据分析师', '算法工程师'];
-      else if (category === '金融') jobs = ['金融分析师', '投资顾问', '风控专员', '客户经理', '基金经理', '保险顾问'];
-      else if (category === '快消') jobs = ['品牌经理', '销售代表', '采购专员', '供应链专员', '市场策划', '渠道经理'];
-      else if (category === '制造业') jobs = ['生产主管', '质量管理', '工艺工程师', '设备工程师', '采购经理', '仓储物流'];
-      else if (category === '咨询') jobs = ['管理咨询', '战略咨询', 'IT咨询', '财务咨询', '人力资源', '市场调研'];
-      else if (category === '医疗') jobs = ['临床医生', '药剂师', '护士', '医学检验', '康复治疗', '健康管理'];
-      else jobs = ['产品经理', 'Java开发', '前端开发', '运营专员', '市场营销', '财务会计'];
+      if (category === '技术研发') jobs = ['Java开发', '前端开发', 'Python开发', '算法工程师', '测试工程师', '运维工程师'];
+      else if (category === '产品与设计') jobs = ['产品经理', 'UI设计师', '交互设计师', '数据分析师', '游戏策划', '用户研究员'];
+      else if (category === '市场与运营') jobs = ['运营专员', '品牌经理', '市场策划', '新媒体运营', '销售代表', '增长运营'];
+      else if (category === '金融与咨询') jobs = ['金融分析师', '投资顾问', '管理咨询', '风控专员', '基金经理', '保险顾问'];
+      else if (category === '医疗与健康') jobs = ['临床医生', '药剂师', '护士', '医学检验', '健康管理', '医疗器械销售'];
+      else if (category === '制造与供应链') jobs = ['生产主管', '质量管理', '工艺工程师', '采购经理', '仓储物流', '供应链专员'];
+      else jobs = ['Java开发', '前端开发', 'Python开发', '算法工程师', '测试工程师', '运维工程师'];
     } else if (scene === 'kaoyan') {
       sceneTitle = '考研复试';
-      if (category === '理工') jobs = ['计算机科学', '电子信息', '机械工程', '土木工程', '材料科学', '自动化'];
-      else if (category === '文史') jobs = ['中国语言文学', '历史学', '哲学', '新闻传播', '外国语言文学', '考古学'];
-      else if (category === '经管') jobs = ['工商管理', '金融学', '会计学', '经济学', '统计学', '国际贸易'];
-      else if (category === '法学') jobs = ['民商法', '刑法', '国际法', '知识产权', '宪法行政法', '诉讼法'];
-      else if (category === '教育') jobs = ['教育学', '心理学', '学前教育', '特殊教育', '教育技术', '体育教育'];
-      else if (category === '医学') jobs = ['临床医学', '基础医学', '口腔医学', '公共卫生', '护理学', '药学'];
+      if (category === '理工类') jobs = ['计算机科学', '电子信息', '机械工程', '土木工程', '材料科学', '自动化'];
+      else if (category === '文史类') jobs = ['中国语言文学', '历史学', '哲学', '新闻传播', '外国语言文学', '考古学'];
+      else if (category === '经管类') jobs = ['工商管理', '金融学', '会计学', '经济学', '统计学', '国际贸易'];
+      else if (category === '法学类') jobs = ['民商法', '刑法', '国际法', '知识产权', '宪法行政法', '诉讼法'];
+      else if (category === '教育类') jobs = ['教育学', '心理学', '学前教育', '特殊教育', '教育技术', '体育教育'];
+      else if (category === '医学类') jobs = ['临床医学', '基础医学', '口腔医学', '公共卫生', '护理学', '药学'];
       else jobs = ['计算机科学', '工商管理', '中国语言文学', '临床医学', '法学', '教育学'];
     } else if (scene === 'kaogong') {
       sceneTitle = '考公面试';

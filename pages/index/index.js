@@ -18,39 +18,39 @@ Page({
     recentList: [],
     scenes: [
       {
-        id: 'job', name: '求职面试', desc: '互联网、金融、快消等 12 个行业',
+        id: 'job', name: '求职面试', desc: '技术研发、产品设计、金融等 6 大方向',
         icon: '💼', color: 'job', badge: '热门', badgeColor: 'badge-amber',
         categories: [
-          { name: '互联网', icon: '💻', count: '68题' },
-          { name: '金融', icon: '🏦', count: '45题' },
-          { name: '快消', icon: '🛒', count: '32题' },
-          { name: '制造业', icon: '🏭', count: '28题' },
-          { name: '咨询', icon: '📊', count: '36题' },
-          { name: '医疗', icon: '🏥', count: '24题' }
+          { name: '技术研发', icon: '💻', count: '70题' },
+          { name: '产品与设计', icon: '🎨', count: '65题' },
+          { name: '市场与运营', icon: '📈', count: '65题' },
+          { name: '金融与咨询', icon: '🏦', count: '60题' },
+          { name: '医疗与健康', icon: '🏥', count: '60题' },
+          { name: '制造与供应链', icon: '🏭', count: '60题' }
         ]
       },
       {
-        id: 'kaoyan', name: '考研复试', desc: '专业课、英语口语、综合素质',
+        id: 'kaoyan', name: '考研复试', desc: '理工、经管、文史等 6 大学科门类',
         icon: '📚', color: 'kaoyan', badge: '新增', badgeColor: 'badge-blue',
         categories: [
-          { name: '理工', icon: '⚙️', count: '52题' },
-          { name: '文史', icon: '📖', count: '38题' },
-          { name: '经管', icon: '💹', count: '42题' },
-          { name: '法学', icon: '⚖️', count: '30题' },
-          { name: '教育', icon: '📝', count: '28题' },
-          { name: '医学', icon: '🩺', count: '22题' }
+          { name: '理工类', icon: '⚙️', count: '65题' },
+          { name: '文史类', icon: '📖', count: '60题' },
+          { name: '经管类', icon: '💹', count: '65题' },
+          { name: '法学类', icon: '⚖️', count: '60题' },
+          { name: '教育类', icon: '📝', count: '60题' },
+          { name: '医学类', icon: '🩺', count: '60题' }
         ]
       },
       {
-        id: 'kaogong', name: '考公面试', desc: '结构化面试、无领导小组讨论',
+        id: 'kaogong', name: '考公面试', desc: '国考、省考、事业编等 6 大方向',
         icon: '🏛️', color: 'kaogong', badge: '结构化', badgeColor: 'badge-green',
         categories: [
-          { name: '国考', icon: '🏛️', count: '56题' },
-          { name: '省考', icon: '🗺️', count: '48题' },
-          { name: '事业编', icon: '📋', count: '36题' },
-          { name: '军队文职', icon: '🎖️', count: '20题' },
-          { name: '遴选', icon: '📑', count: '18题' },
-          { name: '村官', icon: '🌾', count: '15题' }
+          { name: '国考', icon: '🏛️', count: '70题' },
+          { name: '省考', icon: '🗺️', count: '60题' },
+          { name: '事业编', icon: '📋', count: '60题' },
+          { name: '军队文职', icon: '🎖️', count: '60题' },
+          { name: '遴选', icon: '📑', count: '60题' },
+          { name: '村官', icon: '🌾', count: '60题' }
         ]
       }
     ]
@@ -96,13 +96,11 @@ Page({
       greetingName: name
     });
 
-    // 从本地存储加载面试历史
     var history = app.globalData.interviewHistory;
     var progress = app.getInterviewProgress();
 
     var recentList = [];
 
-    // 如果有进行中的面试，放在第一位
     if (progress) {
       recentList.push({
         id: 'progress',
@@ -120,7 +118,6 @@ Page({
       });
     }
 
-    // 添加历史记录
     if (history && history.length > 0) {
       var maxScore = 0;
       for (var si3 = 0; si3 < Math.min(3, history.length); si3++) {
@@ -144,7 +141,6 @@ Page({
         this.setData({ highScore: maxScore });
       }
     } else {
-      // 演示数据（仅在没有真实数据时显示）
       if (!progress) {
         recentList.push(
           { id: 1, title: '互联网产品经理', date: '6月29日', difficulty: '进阶', mode: '语音', score: 87, icon: '💼', color: 'job', scene: 'job', completed: true, totalQuestions: 5 },
@@ -154,19 +150,17 @@ Page({
       }
     }
 
-        var completedToday = 0;
+    var completedToday = 0;
     for (var ci = 0; ci < recentList.length; ci++) {
       if (recentList[ci].completed) completedToday++;
     }
     this.setData({ recentList: recentList, completedToday: completedToday });
   },
 
-  // 支付成功后刷新
   onVipChanged: function() {
     this.refreshData();
   },
 
-  // 点击最近练习项
   onTapRecent: function(e) {
     var item = e.currentTarget.dataset.item;
     if (item.id === 'progress' || !item.completed) {

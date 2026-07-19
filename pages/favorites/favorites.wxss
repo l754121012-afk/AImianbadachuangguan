@@ -37,6 +37,14 @@
 .fav-meta {
   font-size: 22rpx;
   color: #6b7280;
+  margin-bottom: 8rpx;
+}
+
+.fav-answer-link {
+  font-size: 24rpx;
+  color: #60a5fa;
+  padding: 6rpx 0;
+  display: inline-block;
 }
 
 .fav-remove {

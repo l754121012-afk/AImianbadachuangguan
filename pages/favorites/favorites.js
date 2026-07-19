@@ -28,6 +28,24 @@ Page({
     });
   },
 
+  onShowAnswer: function(e) {
+    var item = e.currentTarget.dataset.item;
+    var answer = item.answer || '';
+    if (typeof answer !== 'string') {
+      answer = answer.join('；');
+    }
+    if (!answer) {
+      wx.showToast({ title: '暂无参考要点', icon: 'none' });
+      return;
+    }
+    wx.showModal({
+      title: '参考要点 — ' + (item.title || ''),
+      content: answer,
+      showCancel: false,
+      confirmText: '知道了'
+    });
+  },
+
   onRemove: function(e) {
     var id = e.currentTarget.dataset.id;
     app.removeFavorite(id);

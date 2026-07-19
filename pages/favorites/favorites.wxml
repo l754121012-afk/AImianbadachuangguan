@@ -4,6 +4,7 @@
       <view class="fav-title">{{item.title}}</view>
       <view class="fav-question">{{item.question}}</view>
       <view class="fav-meta">{{item.scene}} · {{item.date}}</view>
+      <view class="fav-answer-link" data-item="{{item}}" catchtap="onShowAnswer">查看参考要点 →</view>
     </view>
     <view class="fav-remove" data-id="{{item.id}}" catchtap="onRemove">✕</view>
   </view>
