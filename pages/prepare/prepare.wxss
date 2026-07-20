@@ -7,7 +7,6 @@
 .scene-header {
   display: flex;
   align-items: center;
-  gap: 16rpx;
   margin-bottom: 32rpx;
 }
 
@@ -15,6 +14,8 @@
   font-size: 32rpx;
   font-weight: 700;
   color: #fff;
+  flex-shrink: 0;
+  margin-right: 16rpx;
 }
 
 .scene-category {
@@ -23,11 +24,15 @@
   background: rgba(245,158,11,0.1);
   padding: 4rpx 16rpx;
   border-radius: 999rpx;
+  max-width: 320rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .diff-pills {
   display: flex;
-  gap: 16rpx;
+  margin-right: -16rpx;
 }
 
 .diff-pill {
@@ -40,6 +45,7 @@
   color: #9ca3af;
   font-size: 28rpx;
   font-weight: 600;
+  margin-right: 16rpx;
 }
 
 .diff-pill.active {
@@ -50,7 +56,7 @@
 
 .mode-cards {
   display: flex;
-  gap: 20rpx;
+  margin-right: -20rpx;
 }
 
 .mode-card {
@@ -61,6 +67,7 @@
   border-radius: 28rpx;
   text-align: center;
   position: relative;
+  margin-right: 20rpx;
 }
 
 .mode-card.active {
