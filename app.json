@@ -12,6 +12,22 @@
     "pages/benefits/benefits",
     "pages/compare/compare"
   ],
+  "subPackages": [
+    {
+      "root": "subpkg-job",
+      "pages": ["pages/loader/loader"]
+    },
+    {
+      "root": "subpkg-exam",
+      "pages": ["pages/loader/loader"]
+    }
+  ],
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["subpkg-job", "subpkg-exam"]
+    }
+  },
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#0a0e1a",
