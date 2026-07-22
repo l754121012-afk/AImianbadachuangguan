@@ -1,12 +1,10 @@
-﻿# OS
-.DS_Store
+﻿# Trae 工作目录
+.agents/
+
+# 字体共享目录（运行时复制，不入仓）
+_shared/fonts/
+
+# 系统 / 编辑器
 Thumbs.db
-
-# IDE
+.DS_Store
 .vscode/
-.idea/
-*.swp
-*.swo
-
-# Logs
-*.log
