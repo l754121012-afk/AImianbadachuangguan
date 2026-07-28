@@ -45,5 +45,5 @@
 
   <view class="safe-note">安全支付 · 即时生效 · 支持随时取消</view>
 
-  <payment-modal show="{{showPayment}}" bind:close="onClosePayment" />
+  <payment-modal id="paymentModal" show="{{showPayment}}" bind:close="onClosePayment" initialIndex="{{selectedModalTierIndex}}" />
 </view>

@@ -2,6 +2,7 @@ var app = getApp();
 
 Page({
   data: {
+    selectedModalTierIndex: 0,
     showPayment: false,
     selectedTierIndex: 0,
     tiers: [
@@ -65,8 +66,20 @@ Page({
   onLoad: function() {},
 
   onBuy: function(e) {
-    var idx = e.currentTarget.dataset.index;
-    this.setData({ selectedTierIndex: idx, showPayment: true });
+    var pageIdx = e.currentTarget.dataset.index;
+    // 页面有4个套餐(免费版+3个付费版)，弹窗只有3个付费版
+    // 页面索引1(单次体验包)→弹窗索引0, 2→1, 3→2
+    var modalIdx = pageIdx > 0 ? pageIdx - 1 : 0;
+    this.setData({ selectedTierIndex: pageIdx, selectedModalTierIndex: modalIdx, showPayment: true }, function() {
+      // 双保险：selectComponent 直接设置组件选中状态
+      var modal = this.selectComponent('#paymentModal');
+      if (modal && modal.data.selectedIndex !== modalIdx) {
+        modal.setData({
+          selectedIndex: modalIdx,
+          currentBenefits: modal.data.prices[modalIdx].benefits
+        });
+      }
+    });
   },
 
   onClosePayment: function() {

@@ -1,10 +1,18 @@
 Component({ 
   properties: { 
-    show: { type: Boolean, value: false } 
+    show: { type: Boolean, value: false },
+    initialIndex: { type: Number, value: 0, observer: function(newVal, oldVal) {
+      if (newVal >= 0 && newVal < this.data.prices.length) {
+        this.setData({
+          selectedIndex: newVal,
+          currentBenefits: this.data.prices[newVal].benefits
+        });
+      }
+    }}
   }, 
 
   data: { 
-    selectedIndex: 1, 
+    selectedIndex: 0, 
     prices: [ 
       { id: "single", name: "单次体验包", price: "9.99", desc: "尝鲜体验，感受AI面试", 
         benefits: ["5次完整AI面试", "完整五维评分报告", "7天有效期内使用"], 
@@ -21,7 +29,13 @@ Component({
 
   lifetimes: { 
     attached: function() { 
-      this.setData({ currentBenefits: this.data.prices[1].benefits }); 
+      var idx = this.properties.initialIndex;
+      if (idx >= 0 && idx < this.data.prices.length) {
+        this.setData({ 
+          selectedIndex: idx, 
+          currentBenefits: this.data.prices[idx].benefits 
+        });
+      }
     } 
   }, 
 
